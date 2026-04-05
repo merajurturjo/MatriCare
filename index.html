@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatriCare | Maternal Health Support System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>MatriCare</h1>
+        <p>Your Reliable Companion for a Safe Pregnancy</p>
+    </header>
+
+    <main>
+        <section id="tracker">
+            <h2>Pregnancy Progress Tracker</h2>
+            <p>Select your Last Menstrual Period (LMP) date:</p>
+            <input type="date" id="lmp-date">
+            <button onclick="calculateEDD()">Calculate Delivery Date</button>
+            <div id="result"></div>
+        </section>
+
+        <section id="features">
+            <h2>Key Features</h2>
+            <div class="feature-grid">
+                <div class="card">
+                    <h3>AI Diet Planner</h3>
+                    <p>Get personalized nutrition advice based on your pregnancy stage.</p>
+                </div>
+                <div class="card">
+                    <h3>Emergency Alert</h3>
+                    <p>Instant GPS-based alerts to nearby hospitals and family members.</p>
+                </div>
+                <div class="card">
+                    <h3>Vaccination Tracker</h3>
+                    <p>Never miss a vaccine with automated reminders and schedules.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 MatriCare Project. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
