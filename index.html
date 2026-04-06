@@ -3,90 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatriCare - Maternal Health Support</title>
+    <title>MatriCare - Advanced Maternal Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <header>
-        <h1>MatriCare</h1>
-        <p>Your Digital Companion for a Healthy Pregnancy</p>
-    </header>
-
-    <div class="container">
-        <section class="tracker-card">
-            <h2>Pregnancy Progress Tracker</h2>
-            <p>Select your Last Menstrual Period (LMP) date:</p>
-            <div class="input-group">
-                <input type="date" id="lmp-date">
-                <button class="main-btn" onclick="calculateEDD()">Calculate Delivery Date</button>
+    <div class="dashboard-wrapper">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>MatriCare</h2>
             </div>
-            <div id="result" class="result-box"></div>
-        </section>
+            <ul class="nav-links">
+                <li class="active" onclick="showSection('dashboard')"><i class="fas fa-th-large"></i> Dashboard</li>
+                <li onclick="showSection('pregnancy-tracker')"><i class="fas fa-baby"></i> Pregnancy Tracker</li>
+                <li onclick="showSection('vaccine-tracker')"><i class="fas fa-syringe"></i> Vaccine Tracker</li>
+                <li onclick="showSection('appointments')"><i class="fas fa-calendar-check"></i> Appointments</li>
+                <li onclick="showSection('hospitals')"><i class="fas fa-hospital"></i> Hospitals</li>
+                <li onclick="showSection('blood-donor')"><i class="fas fa-heartbeat"></i> Blood Donor</li>
+                <li onclick="showSection('ask-assistant')"><i class="fas fa-robot"></i> Ask Assistant</li>
+                <li onclick="showSection('my-profile')"><i class="fas fa-user-circle"></i> My Profile</li>
+            </ul>
+        </nav>
 
-        <h2 class="section-title">Key Features</h2>
-        <div class="features-grid">
-            <div class="card">
-                <h3>AI Diet Planner</h3>
-                <p>Get personalized nutrition advice based on your pregnancy stage.</p>
-                <button class="btn" onclick="showFeatureMsg('AI Diet Planner')">Check Plan</button>
+        <main class="main-content">
+            <header class="top-bar">
+                <h1 id="section-title">Dashboard</h1>
+                <div class="user-pill">
+                    <span id="nav-user-name">Welcome, Mother</span>
+                    <i class="fas fa-bell"></i>
+                </div>
+            </header>
+
+            <div class="container">
+                
+                <section id="dashboard" class="content-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fas fa-calendar-day"></i>
+                            <h3>Current Week</h3>
+                            <p id="stat-week">Select LMP to view</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-clock"></i>
+                            <h3>Next Vaccine</h3>
+                            <p>Tetanus (TT-1)</p>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-notes-medical"></i>
+                            <h3>Daily Kicks</h3>
+                            <p id="stat-kicks">0</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="pregnancy-tracker" class="content-section">
+                    <div class="card central">
+                        <h3>Delivery Date Calculator</h3>
+                        <p>Enter your Last Menstrual Period (LMP) date:</p>
+                        <div class="input-group">
+                            <input type="date" id="lmp-date">
+                            <button class="main-btn" onclick="calculateEDD()">Calculate</button>
+                        </div>
+                        <div id="result" class="result-box"></div>
+                        <hr>
+                        <h3>Baby Visualizer</h3>
+                        <div id="baby-size-icon" style="font-size: 4rem; margin: 20px 0;">👶</div>
+                        <p id="growth-text">Waiting for data...</p>
+                    </div>
+                </section>
+
+                <section id="vaccine-tracker" class="content-section">
+                    <div class="card">
+                        <h3>Vaccination Schedule</h3>
+                        <table>
+                            <tr><th>Vaccine Name</th><th>Status</th><th>Action</th></tr>
+                            <tr><td>TT 1</td><td>Completed</td><td><i class="fas fa-check-circle text-success"></i></td></tr>
+                            <tr><td>TT 2</td><td>Pending</td><td><button class="btn" onclick="markDone(this)">Mark Done</button></td></tr>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="appointments" class="content-section">
+                    <div class="card">
+                        <h3>Upcoming Appointments</h3>
+                        <p>Next Checkup: <strong>April 25, 2026</strong> with Dr. Selim</p>
+                        <button class="btn" onclick="alert('Appointment booking system coming soon!')">Book New</button>
+                    </div>
+                </section>
+
+                <section id="hospitals" class="content-section">
+                    <div class="card">
+                        <h3>Nearby Maternity Hospitals</h3>
+                        <p>Quick access to hospital locations on Google Maps.</p>
+                        <button class="btn" onclick="window.open('https://www.google.com/maps/search/maternity+hospital+near+me', '_blank')">Open Map</button>
+                    </div>
+                </section>
+
+                <section id="blood-donor" class="content-section">
+                    <div class="card">
+                        <h3>Blood Support</h3>
+                        <p>Search for blood donors or request an emergency blood supply.</p>
+                        <button class="btn" style="background:#800f2f;">Request Blood</button>
+                    </div>
+                </section>
+
+                <section id="ask-assistant" class="content-section">
+                    <div class="card">
+                        <h3>MatriCare AI Assistant</h3>
+                        <div class="chat-box" style="background: #121212; height: 200px; padding: 15px; border-radius: 10px; margin-bottom: 10px; color: #888;">
+                            Assistant: "Hello! How can I help you today?"
+                        </div>
+                        <input type="text" placeholder="Type your health query..." style="width: 80%; padding: 10px; border-radius: 5px; background: #2a2a2a; color: white; border: 1px solid #444;">
+                        <button class="btn" onclick="alert('Assistant is analyzing...')">Ask</button>
+                    </div>
+                </section>
+
+                <section id="my-profile" class="content-section">
+                    <div class="card">
+                        <div class="profile-header">
+                            <div class="avatar">👩‍⚕️</div>
+                            <h2 id="profile-name">Mother's Name</h2>
+                        </div>
+                        <div class="profile-details">
+                            <p><strong>Email:</strong> mother@example.com</p>
+                            <p><strong>Blood Group:</strong> B+ Positive</p>
+                            <p><strong>Emergency Contact:</strong> +8801XXXXXXX</p>
+                        </div>
+                        <button class="btn" onclick="editProfile()">Edit Profile</button>
+                    </div>
+                </section>
+
             </div>
-
-            <div class="card">
-                <h3>Emergency Alert</h3>
-                <p>Instant alerts to nearby hospitals and family members.</p>
-                <button class="btn emergency" onclick="triggerEmergency()">Send Alert</button>
-            </div>
-
-            <div class="card">
-                <h3>Vaccination Tracker</h3>
-                <p>Never miss a vaccine with automated reminders and schedules.</p>
-                <button class="btn" onclick="showVaccineSchedule()">View Schedule</button>
-            </div>
-        </div>
-
-        <h2 class="section-title">Health & Wellness Tools</h2>
-        <div class="features-grid">
-            
-            <div class="card">
-                <h3>Baby Visualizer</h3>
-                <p id="growth-text">Select LMP date to see baby's size comparison.</p>
-                <div id="baby-size-icon" style="font-size: 3rem; margin: 15px 0;">👶</div>
-            </div>
-
-            <div class="card">
-                <h3>Kick Counter</h3>
-                <p>Track your baby's daily movements.</p>
-                <h2 id="kick-count" style="font-size: 2.5rem; color: #ff4d6d; margin: 10px 0;">0</h2>
-                <button class="btn" onclick="countKick()">Count Kick</button>
-                <button class="btn" style="background:#444; margin-top:5px;" onclick="resetKicks()">Reset</button>
-            </div>
-
-            <div class="card">
-                <h3>Health Logs</h3>
-                <p>Record your daily BP and Weight.</p>
-                <input type="text" id="health-note" placeholder="e.g., BP: 120/80, Wt: 65kg" style="width:100%; padding:10px; border-radius:5px; background:#2a2a2a; color:white; border:1px solid #444; margin-bottom:10px;">
-                <button class="btn" onclick="saveHealthLog()">Save Log</button>
-            </div>
-
-            <div class="card">
-                <h3>Hospital Finder</h3>
-                <p>Locate the nearest maternity hospitals on map.</p>
-                <button class="btn" onclick="findHospitals()">Find Nearby</button>
-            </div>
-
-            <div class="card">
-                <h3>Doctor's Notes</h3>
-                <p>Important medical contacts and checkup notes.</p>
-                <button class="btn" onclick="showDoctorNote()">View Notes</button>
-            </div>
-
-        </div>
+        </main>
     </div>
-
-    <footer>
-        <p>&copy; 2026 MatriCare | Built for Maternal Health Awareness</p>
-    </footer>
 
     <script src="script.js"></script>
 </body>
