@@ -1,117 +1,115 @@
 /**
- * MatriCare - Logic for Navigation and Features
+ * MatriCare - Logic for Navigation and Interactive Features
  */
 
-// 1. Sidebar Navigation Logic
+// 1. Navigation Logic
 function showSection(sectionId, event) {
-    // Hide all sections first
-    const sections = document.querySelectorAll('.content-section');
-    sections.forEach(section => {
-        section.classList.remove('active');
-    });
+    // Hide all sections
+    document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
     
-    // Deactivate all sidebar links
-    const navLinks = document.querySelectorAll('.nav-links li');
-    navLinks.forEach(li => {
-        li.classList.remove('active');
-    });
+    // Remove active class from sidebar
+    document.querySelectorAll('.nav-links li').forEach(li => li.classList.remove('active'));
 
-    // Show the targeted section
+    // Show target section
     const target = document.getElementById(sectionId);
-    if (target) {
-        target.classList.add('active');
-    }
+    if (target) target.classList.add('active');
     
-    // Update Header Title
-    const title = document.getElementById('section-title');
-    if (title) {
-        title.innerText = sectionId.replace('-', ' ').toUpperCase();
-    }
+    // Update Header
+    document.getElementById('section-title').innerText = sectionId.replace('-', ' ').toUpperCase();
     
-    // Mark the clicked sidebar item as active
+    // Highlight clicked menu
     if (event && event.currentTarget) {
         event.currentTarget.classList.add('active');
     }
 }
 
-// 2. Pregnancy Calculator & Visualizer
+// 2. Pregnancy Tracker Logic
 function calculateEDD() {
-    const lmpInput = document.getElementById('lmp-date').value;
-    const resultDiv = document.getElementById('result');
-    const growthText = document.getElementById('growth-text');
-    const babyIcon = document.getElementById('baby-size-icon');
-    const statWeek = document.getElementById('stat-week');
+    const lmpValue = document.getElementById('lmp-date').value;
+    if (!lmpValue) return alert("Please select a date.");
 
-    if (!lmpInput) {
-        alert("Please select a date!");
-        return;
-    }
-
-    const lmpDate = new Date(lmpInput);
+    const lmpDate = new Date(lmpValue);
     const today = new Date();
     
-    // EDD (LMP + 280 Days)
-    const eddDate = new Date(lmpDate);
-    eddDate.setDate(lmpDate.getDate() + 280);
+    // EDD: LMP + 280 Days
+    const edd = new Date(lmpDate);
+    edd.setDate(lmpDate.getDate() + 280);
 
-    const diffTime = Math.abs(today - lmpDate);
-    const diffWeeks = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+    const diffWeeks = Math.floor((today - lmpDate) / (1000 * 60 * 60 * 24 * 7));
 
-    // Update Result UI
-    resultDiv.innerHTML = `
-        <div style="background: #1a1a1a; padding: 15px; border-radius: 10px; margin-top: 15px; border: 1px solid #444;">
-            <h3 style="color:#ff4d6d">Estimated Delivery: ${eddDate.toDateString()}</h3>
-            <p>You are in <strong>Week ${diffWeeks}</strong> of your journey.</p>
+    document.getElementById('result').innerHTML = `
+        <div class="result-highlight">
+            <h4>Expected Delivery: ${edd.toDateString()}</h4>
+            <p>You are in <strong>Week ${diffWeeks}</strong></p>
         </div>
     `;
     
-    // Update Dashboard Stats
-    if (statWeek) statWeek.innerText = "Week " + diffWeeks;
+    document.getElementById('stat-week').innerText = "Week " + diffWeeks;
 
-    // Visualizer Logic
-    if(diffWeeks <= 12) { growthText.innerText = "Size: Lime"; babyIcon.innerText = "🍋"; }
-    else if(diffWeeks <= 20) { growthText.innerText = "Size: Banana"; babyIcon.innerText = "🍌"; }
-    else if(diffWeeks <= 30) { growthText.innerText = "Size: Cabbage"; babyIcon.innerText = "🥬"; }
-    else { growthText.innerText = "Size: Fully Grown Baby!"; babyIcon.innerText = "👶"; }
+    // Growth Visualizer
+    const icon = document.getElementById('baby-size-icon');
+    const text = document.getElementById('growth-text');
+    if (diffWeeks <= 12) { icon.innerText = "🍋"; text.innerText = "Size: Lime"; }
+    else if (diffWeeks <= 20) { icon.innerText = "🍌"; text.innerText = "Size: Banana"; }
+    else if (diffWeeks <= 30) { icon.innerText = "🥬"; text.innerText = "Size: Cabbage"; }
+    else { icon.innerText = "👶"; text.innerText = "Size: Fully Grown Baby"; }
 }
 
-// 3. Kick Counter (Interactive Dashboard Stat)
-let count = 0;
+// 3. Kick Counter (Dashboard Interactive)
+let kicks = 0;
 function countKick() {
-    count++;
-    const kickDisplay = document.getElementById('stat-kicks');
-    if (kickDisplay) {
-        kickDisplay.innerText = count;
+    kicks++;
+    document.getElementById('stat-kicks').innerText = kicks;
+}
+
+// 4. Vaccine Tracker
+function markDone(btn) {
+    btn.parentElement.innerHTML = '<span style="color:#4caf50"><i class="fas fa-check"></i> Done</span>';
+}
+
+// 5. Blood Support Logic
+const donors = [
+    { name: "Sayem Ahmed", group: "B+", phone: "017XXXXXXXX" },
+    { name: "Selim Reza", group: "O+", phone: "018XXXXXXXX" }
+];
+
+function toggleBloodForm(type) {
+    const ui = document.getElementById('blood-search-ui');
+    ui.style.display = type === 'search' ? 'block' : 'none';
+    if (type === 'register') alert("Registration form coming soon!");
+}
+
+function searchDonor() {
+    const grp = document.getElementById('search-group').value;
+    const res = document.getElementById('donor-results');
+    const filtered = donors.filter(d => d.group === grp);
+    
+    if (filtered.length > 0) {
+        res.innerHTML = filtered.map(d => `<div class="donor-item"><strong>${d.name}</strong> - ${d.phone}</div>`).join('');
+    } else {
+        res.innerHTML = "<p>No donors found.</p>";
     }
 }
 
-// 4. Vaccine Tracker - Status Update
-function markDone(btn) {
-    btn.parentElement.innerHTML = '<span style="color:#4caf50"><i class="fas fa-check-circle"></i> Completed</span>';
-}
-
-// 5. AI Assistant Simulation
+// 6. AI Assistant Simulation
 function askAI() {
     const input = document.getElementById('ai-input');
-    const chatBox = document.getElementById('chat-box');
+    const chat = document.getElementById('chat-box');
+    if (!input.value) return;
+
+    chat.innerHTML += `<p style="text-align:right; color:white;">You: ${input.value}</p>`;
     const query = input.value;
-
-    if (!query) return;
-
-    // User Message
-    chatBox.innerHTML += `<p style="color: white; margin-top: 10px; text-align: right;"><strong>You:</strong> ${query}</p>`;
     input.value = "";
 
-    // Assistant Response
     setTimeout(() => {
-        chatBox.innerHTML += `<p style="color: #ff4d6d; margin-top: 10px;"><strong>Assistant:</strong> Checking guidance for "${query}"... Please ensure you stay hydrated and consult your doctor for any sharp pain.</p>`;
-        chatBox.scrollTop = chatBox.scrollHeight;
+        chat.innerHTML += `<p><strong>AI:</strong> For "${query}", stay hydrated and rest. Check your Vaccine Tracker for TT-2 status.</p>`;
+        chat.scrollTop = chat.scrollHeight;
     }, 1000);
 }
 
-// 6. Profile Editing
+// 7. Profile Logic
 function editProfile() {
-    const name = prompt("Enter your name:");
+    const name = prompt("Enter your Name:");
     if (name) {
         document.getElementById('profile-name').innerText = name;
         document.getElementById('nav-user-name').innerText = "Welcome, " + name;
