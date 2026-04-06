@@ -26,7 +26,6 @@
 
         <h2 class="section-title">Key Features</h2>
         <div class="features-grid">
-            
             <div class="card">
                 <h3>AI Diet Planner</h3>
                 <p>Get personalized nutrition advice based on your pregnancy stage.</p>
@@ -43,6 +42,43 @@
                 <h3>Vaccination Tracker</h3>
                 <p>Never miss a vaccine with automated reminders and schedules.</p>
                 <button class="btn" onclick="showVaccineSchedule()">View Schedule</button>
+            </div>
+        </div>
+
+        <h2 class="section-title">Health & Wellness Tools</h2>
+        <div class="features-grid">
+            
+            <div class="card">
+                <h3>Baby Visualizer</h3>
+                <p id="growth-text">Select LMP date to see baby's size comparison.</p>
+                <div id="baby-size-icon" style="font-size: 3rem; margin: 15px 0;">👶</div>
+            </div>
+
+            <div class="card">
+                <h3>Kick Counter</h3>
+                <p>Track your baby's daily movements.</p>
+                <h2 id="kick-count" style="font-size: 2.5rem; color: #ff4d6d; margin: 10px 0;">0</h2>
+                <button class="btn" onclick="countKick()">Count Kick</button>
+                <button class="btn" style="background:#444; margin-top:5px;" onclick="resetKicks()">Reset</button>
+            </div>
+
+            <div class="card">
+                <h3>Health Logs</h3>
+                <p>Record your daily BP and Weight.</p>
+                <input type="text" id="health-note" placeholder="e.g., BP: 120/80, Wt: 65kg" style="width:100%; padding:10px; border-radius:5px; background:#2a2a2a; color:white; border:1px solid #444; margin-bottom:10px;">
+                <button class="btn" onclick="saveHealthLog()">Save Log</button>
+            </div>
+
+            <div class="card">
+                <h3>Hospital Finder</h3>
+                <p>Locate the nearest maternity hospitals on map.</p>
+                <button class="btn" onclick="findHospitals()">Find Nearby</button>
+            </div>
+
+            <div class="card">
+                <h3>Doctor's Notes</h3>
+                <p>Important medical contacts and checkup notes.</p>
+                <button class="btn" onclick="showDoctorNote()">View Notes</button>
             </div>
 
         </div>
