@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatriCare - Maternal Health Dashboard</title>
+    <title>MatriCare - Advanced Maternal Dashboard</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -42,7 +42,7 @@
                         <div class="stat-card">
                             <i class="fas fa-calendar-day"></i>
                             <h3>Current Week</h3>
-                            <p id="stat-week">Not Calculated</p>
+                            <p id="stat-week">Not Set</p>
                         </div>
                         <div class="stat-card" onclick="countKick()" style="cursor:pointer; border: 1px solid #ff4d6d;">
                             <i class="fas fa-footprints"></i>
@@ -51,9 +51,9 @@
                             <small>Click card to count</small>
                         </div>
                         <div class="stat-card">
-                            <i class="fas fa-syringe"></i>
-                            <h3>Next Vaccine</h3>
-                            <p>TT-2 (Pending)</p>
+                            <i class="fas fa-clock"></i>
+                            <h3>Next Checkup</h3>
+                            <p id="stat-next-app">None Scheduled</p>
                         </div>
                     </div>
                 </section>
@@ -62,15 +62,15 @@
                     <div class="card">
                         <h3>Due Date Calculator</h3>
                         <p>Enter your Last Menstrual Period (LMP) date:</p>
-                        <div class="input-group">
-                            <input type="date" id="lmp-date">
+                        <div class="input-group" style="margin: 20px 0;">
+                            <input type="date" id="lmp-date" class="dark-input">
                             <button class="main-btn" onclick="calculateEDD()">Calculate</button>
                         </div>
                         <div id="result"></div>
-                        <hr style="margin: 20px 0; border: 0; border-top: 1px solid #333;">
+                        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #333;">
                         <h3>Baby Growth Visualizer</h3>
-                        <div id="baby-size-icon" style="font-size: 5rem; margin: 10px 0;">🤰</div>
-                        <p id="growth-text">Calculate to see baby's size comparison.</p>
+                        <div id="baby-size-icon" style="font-size: 5rem; margin: 15px 0;">🤰</div>
+                        <p id="growth-text">Awaiting data for comparison...</p>
                     </div>
                 </section>
 
@@ -79,11 +79,11 @@
                         <h3>Immunization Schedule</h3>
                         <table class="data-table">
                             <thead>
-                                <tr><th>Vaccine</th><th>Timeline</th><th>Status</th></tr>
+                                <tr><th>Vaccine</th><th>Timing</th><th>Status</th></tr>
                             </thead>
                             <tbody>
-                                <tr><td>TT-1</td><td>As soon as pregnancy is confirmed</td><td><i class="fas fa-check-circle" style="color: #4caf50;"></i> Completed</td></tr>
-                                <tr><td>TT-2</td><td>4 weeks after TT-1</td><td><button class="btn" onclick="markDone(this)">Mark Done</button></td></tr>
+                                <tr><td>TT-1</td><td>Confirmation</td><td><i class="fas fa-check-circle" style="color: #4caf50;"></i> Completed</td></tr>
+                                <tr><td>TT-2</td><td>+4 Weeks</td><td><button class="btn" onclick="markDone(this)">Mark Done</button></td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -91,18 +91,15 @@
 
                 <section id="blood-donor" class="content-section">
                     <div class="card">
-                        <h3><i class="fas fa-heart"></i> Blood Support System</h3>
-                        <p>Emergency blood matching for expectant mothers.</p>
-                        <div style="margin: 20px 0; display: flex; gap: 10px; justify-content: center;">
+                        <h3><i class="fas fa-heart"></i> Blood Support</h3>
+                        <div style="margin: 20px 0;">
                             <button class="btn" onclick="toggleBloodForm('search')">Find Donor</button>
                             <button class="btn" style="background:#2a9d8f;" onclick="toggleBloodForm('register')">Register as Donor</button>
                         </div>
-
                         <div id="blood-search-ui" style="display:none; background:#1a1a1a; padding: 20px; border-radius: 10px;">
                             <select id="search-group" class="dark-input">
-                                <option value="">Select Blood Group</option>
-                                <option value="A+">A+</option><option value="B+">B+</option>
-                                <option value="O+">O+</option><option value="AB+">AB+</option>
+                                <option value="">Select Group</option>
+                                <option value="A+">A+</option><option value="B+">B+</option><option value="O+">O+</option>
                             </select>
                             <button class="btn" onclick="searchDonor()">Search</button>
                             <div id="donor-results" style="margin-top: 15px;"></div>
@@ -110,33 +107,52 @@
                     </div>
                 </section>
 
+                <section id="appointments" class="content-section">
+                    <div class="card">
+                        <h3><i class="fas fa-calendar-check"></i> Smart Scheduler</h3>
+                        <div class="sub-card" style="background: #1a1a1a; padding: 20px; border-radius: 10px; margin-bottom: 25px;">
+                            <h4>Book a Visit</h4>
+                            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap;">
+                                <input type="text" id="doc-name" placeholder="Doctor's Name" class="dark-input">
+                                <input type="date" id="app-date" class="dark-input">
+                                <button class="btn" onclick="addAppointment()">Save Appointment</button>
+                            </div>
+                        </div>
+                        <div class="appointment-list">
+                            <h4>Upcoming Visits</h4>
+                            <div id="app-list-container">
+                                <p style="color: #666; margin-top: 10px;">No appointments added yet.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <section id="ask-assistant" class="content-section">
                     <div class="card">
-                        <h3>MatriCare AI Assistant</h3>
-                        <div class="chat-window" id="chat-box">
-                            <p style="color: #ff4d6d;"><strong>AI:</strong> Hello! How can I assist you with your health today?</p>
+                        <h3>AI Health Assistant</h3>
+                        <div class="chat-window" id="chat-box" style="background: #121212; height: 250px; overflow-y: auto; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: left; border: 1px solid #333;">
+                            <p style="color: #ff4d6d;"><strong>AI:</strong> Welcome! Ask me anything about your pregnancy diet or symptoms.</p>
                         </div>
-                        <div class="chat-input-area">
-                            <input type="text" id="ai-input" placeholder="Ask about diet or symptoms...">
-                            <button class="btn" onclick="askAI()">Send</button>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="ai-input" placeholder="Type here..." style="flex: 1; padding: 12px; border-radius: 5px; background: #333; color: white; border: 1px solid #444;">
+                            <button class="btn" onclick="askAI()">Ask</button>
                         </div>
                     </div>
                 </section>
 
                 <section id="my-profile" class="content-section">
-                    <div class="card profile-view">
-                        <div class="avatar-large">👩‍⚕️</div>
+                    <div class="card">
+                        <div style="font-size: 4rem; margin-bottom: 15px;">👩‍⚕️</div>
                         <h2 id="profile-name">Mother's Name</h2>
-                        <p id="profile-email">mother@example.com</p>
-                        <div class="profile-stats">
-                            <span><strong>Blood:</strong> B+</span> | <span><strong>Age:</strong> 26</span>
+                        <div style="margin: 15px 0; color: #bbb;">
+                            <p>Blood Group: <strong>B+</strong></p>
+                            <p>Location: Dhaka, Bangladesh</p>
                         </div>
-                        <button class="btn" onclick="editProfile()">Edit Profile Info</button>
+                        <button class="btn" onclick="editProfile()">Edit Profile</button>
                     </div>
                 </section>
 
-                <section id="appointments" class="content-section"><div class="card"><h3>Appointments</h3><p>Consult with Dr. Selim (Pending)</p></div></section>
-                <section id="hospitals" class="content-section"><div class="card"><h3>Nearby Hospitals</h3><button class="btn" onclick="window.open('https://www.google.com/maps/search/maternity+hospital')">Open Maps</button></div></section>
+                <section id="hospitals" class="content-section"><div class="card"><h3>Emergency Hospitals</h3><button class="btn" onclick="window.open('https://www.google.com/maps/search/maternity+hospital')">Find Nearest Hospital</button></div></section>
 
             </div>
         </main>
