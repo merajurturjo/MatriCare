@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatriCare - Advanced Maternal Dashboard</title>
+    <title>MatriCare - Unified Maternal Platform</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -18,11 +18,17 @@
                 <li class="active" onclick="showSection('dashboard', event)"><i class="fas fa-th-large"></i> Dashboard</li>
                 <li onclick="showSection('pregnancy-tracker', event)"><i class="fas fa-baby"></i> Pregnancy Tracker</li>
                 <li onclick="showSection('vaccine-tracker', event)"><i class="fas fa-syringe"></i> Vaccine Tracker</li>
-                <li onclick="showSection('blood-donor', event)"><i class="fas fa-droplet"></i> Blood Support</li>
                 <li onclick="showSection('appointments', event)"><i class="fas fa-calendar-check"></i> Appointments</li>
-                <li onclick="showSection('hospitals', event)"><i class="fas fa-hospital"></i> Hospitals</li>
+                <li onclick="showSection('journal', event)"><i class="fas fa-book-heart"></i> Daily Journal</li>
+                <li onclick="showSection('nutrition', event)"><i class="fas fa-apple-whole"></i> Nutrition Plan</li>
+                <li onclick="showSection('myth-buster', event)"><i class="fas fa-lightbulb"></i> Myth Buster</li>
+                <li onclick="showSection('community', event)"><i class="fas fa-users"></i> Community</li>
+                <li onclick="showSection('pharmacy', event)"><i class="fas fa-pills"></i> Pharmacy</li>
+                <li onclick="showSection('blood-donor', event)"><i class="fas fa-droplet"></i> Blood Support</li>
+                <li onclick="showSection('ai-translator', event)"><i class="fas fa-language"></i> AI Translator</li>
                 <li onclick="showSection('ask-assistant', event)"><i class="fas fa-robot"></i> Ask Assistant</li>
                 <li onclick="showSection('my-profile', event)"><i class="fas fa-user-circle"></i> My Profile</li>
+                <li onclick="handleLogout()" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</li>
             </ul>
         </nav>
 
@@ -39,120 +45,92 @@
                 
                 <section id="dashboard" class="content-section active">
                     <div class="stats-grid">
-                        <div class="stat-card">
-                            <i class="fas fa-calendar-day"></i>
-                            <h3>Current Week</h3>
-                            <p id="stat-week">Not Set</p>
+                        <div class="stat-card"><i class="fas fa-calendar-day"></i><h3>Current Week</h3><p id="stat-week">Not Set</p></div>
+                        <div class="stat-card" onclick="countKick()" style="cursor:pointer;"><i class="fas fa-footprints"></i><h3>Kick Counter</h3><p id="stat-kicks">0</p></div>
+                        <div class="stat-card"><i class="fas fa-clock"></i><h3>Next Visit</h3><p id="stat-next-app">None</p></div>
+                    </div>
+                </section>
+
+                <section id="journal" class="content-section">
+                    <div class="card">
+                        <h3><i class="fas fa-pen-fancy"></i> Pregnancy Journal</h3>
+                        <p>Document your feelings and milestones.</p>
+                        <textarea id="journal-input" placeholder="How are you feeling today?" class="dark-input" style="width:100%; height:100px; margin-top:15px;"></textarea>
+                        <button class="btn" onclick="saveJournal()">Save Entry</button>
+                        <div id="journal-history" style="margin-top:20px; text-align:left;"></div>
+                    </div>
+                </section>
+
+                <section id="nutrition" class="content-section">
+                    <div class="card">
+                        <h3><i class="fas fa-carrot"></i> Healthy Diet Guide</h3>
+                        <div class="stats-grid">
+                            <div class="sub-card"><h4>Trimester 1</h4><p>Folic acid & Iron rich foods.</p></div>
+                            <div class="sub-card"><h4>Trimester 2</h4><p>Calcium & Protein focus.</p></div>
+                            <div class="sub-card"><h4>Trimester 3</h4><p>Energy-dense & Omega-3.</p></div>
                         </div>
-                        <div class="stat-card" onclick="countKick()" style="cursor:pointer; border: 1px solid #ff4d6d;">
-                            <i class="fas fa-footprints"></i>
-                            <h3>Kick Counter</h3>
-                            <p id="stat-kicks">0</p>
-                            <small>Click card to count</small>
+                    </div>
+                </section>
+
+                <section id="myth-buster" class="content-section">
+                    <div class="card">
+                        <h3><i class="fas fa-check-double"></i> Myth vs Fact</h3>
+                        <div class="myth-item">
+                            <p><strong>Myth:</strong> "You should eat for two."</p>
+                            <p style="color:#4caf50;"><strong>Fact:</strong> Quality matters more than quantity. Most only need 300 extra calories.</p>
                         </div>
-                        <div class="stat-card">
-                            <i class="fas fa-clock"></i>
-                            <h3>Next Checkup</h3>
-                            <p id="stat-next-app">None Scheduled</p>
+                    </div>
+                </section>
+
+                <section id="community" class="content-section">
+                    <div class="card">
+                        <h3><i class="fas fa-comments"></i> Mother's Circle</h3>
+                        <div class="sub-card">
+                            <p><strong>@Sara_92:</strong> "Anyone feeling extra tired in week 12?"</p>
+                            <small>5 Replies • 10 Likes</small>
                         </div>
+                        <button class="btn" style="margin-top:15px;">Join Conversation</button>
+                    </div>
+                </section>
+
+                <section id="pharmacy" class="content-section">
+                    <div class="card">
+                        <h3><i class="fas fa-store"></i> Essential Pharmacy</h3>
+                        <p>Order prescribed vitamins and supplements.</p>
+                        <div style="display:flex; gap:10px; justify-content:center; margin-top:15px;">
+                            <div class="sub-card">Prenatal Vitamins<br><strong>$15.00</strong></div>
+                            <div class="sub-card">Calcium Tabs<br><strong>$10.00</strong></div>
+                        </div>
+                        <button class="btn" onclick="alert('Redirecting to Pharmacy...')">Order Now</button>
+                    </div>
+                </section>
+
+                <section id="ai-translator" class="content-section">
+                    <div class="card">
+                        <h3><i class="fas fa-language"></i> Health Report Translator</h3>
+                        <p>Translate complex medical terms to your native language.</p>
+                        <textarea id="trans-input" placeholder="Paste medical report text here..." class="dark-input" style="width:100%; height:80px;"></textarea>
+                        <button class="btn" onclick="translateText()">Translate to Bengali</button>
+                        <p id="trans-output" style="margin-top:15px; font-style:italic; color:#bbb;"></p>
                     </div>
                 </section>
 
                 <section id="pregnancy-tracker" class="content-section">
                     <div class="card">
                         <h3>Due Date Calculator</h3>
-                        <p>Enter your Last Menstrual Period (LMP) date:</p>
-                        <div class="input-group" style="margin: 20px 0;">
+                        <div class="input-group">
                             <input type="date" id="lmp-date" class="dark-input">
                             <button class="main-btn" onclick="calculateEDD()">Calculate</button>
                         </div>
                         <div id="result"></div>
-                        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #333;">
-                        <h3>Baby Growth Visualizer</h3>
-                        <div id="baby-size-icon" style="font-size: 5rem; margin: 15px 0;">🤰</div>
-                        <p id="growth-text">Awaiting data for comparison...</p>
                     </div>
                 </section>
-
-                <section id="vaccine-tracker" class="content-section">
-                    <div class="card">
-                        <h3>Immunization Schedule</h3>
-                        <table class="data-table">
-                            <thead>
-                                <tr><th>Vaccine</th><th>Timing</th><th>Status</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>TT-1</td><td>Confirmation</td><td><i class="fas fa-check-circle" style="color: #4caf50;"></i> Completed</td></tr>
-                                <tr><td>TT-2</td><td>+4 Weeks</td><td><button class="btn" onclick="markDone(this)">Mark Done</button></td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-
-                <section id="blood-donor" class="content-section">
-                    <div class="card">
-                        <h3><i class="fas fa-heart"></i> Blood Support</h3>
-                        <div style="margin: 20px 0;">
-                            <button class="btn" onclick="toggleBloodForm('search')">Find Donor</button>
-                            <button class="btn" style="background:#2a9d8f;" onclick="toggleBloodForm('register')">Register as Donor</button>
-                        </div>
-                        <div id="blood-search-ui" style="display:none; background:#1a1a1a; padding: 20px; border-radius: 10px;">
-                            <select id="search-group" class="dark-input">
-                                <option value="">Select Group</option>
-                                <option value="A+">A+</option><option value="B+">B+</option><option value="O+">O+</option>
-                            </select>
-                            <button class="btn" onclick="searchDonor()">Search</button>
-                            <div id="donor-results" style="margin-top: 15px;"></div>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="appointments" class="content-section">
-                    <div class="card">
-                        <h3><i class="fas fa-calendar-check"></i> Smart Scheduler</h3>
-                        <div class="sub-card" style="background: #1a1a1a; padding: 20px; border-radius: 10px; margin-bottom: 25px;">
-                            <h4>Book a Visit</h4>
-                            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px; flex-wrap: wrap;">
-                                <input type="text" id="doc-name" placeholder="Doctor's Name" class="dark-input">
-                                <input type="date" id="app-date" class="dark-input">
-                                <button class="btn" onclick="addAppointment()">Save Appointment</button>
-                            </div>
-                        </div>
-                        <div class="appointment-list">
-                            <h4>Upcoming Visits</h4>
-                            <div id="app-list-container">
-                                <p style="color: #666; margin-top: 10px;">No appointments added yet.</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="ask-assistant" class="content-section">
-                    <div class="card">
-                        <h3>AI Health Assistant</h3>
-                        <div class="chat-window" id="chat-box" style="background: #121212; height: 250px; overflow-y: auto; padding: 15px; border-radius: 10px; margin-bottom: 15px; text-align: left; border: 1px solid #333;">
-                            <p style="color: #ff4d6d;"><strong>AI:</strong> Welcome! Ask me anything about your pregnancy diet or symptoms.</p>
-                        </div>
-                        <div style="display: flex; gap: 10px;">
-                            <input type="text" id="ai-input" placeholder="Type here..." style="flex: 1; padding: 12px; border-radius: 5px; background: #333; color: white; border: 1px solid #444;">
-                            <button class="btn" onclick="askAI()">Ask</button>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="my-profile" class="content-section">
-                    <div class="card">
-                        <div style="font-size: 4rem; margin-bottom: 15px;">👩‍⚕️</div>
-                        <h2 id="profile-name">Mother's Name</h2>
-                        <div style="margin: 15px 0; color: #bbb;">
-                            <p>Blood Group: <strong>B+</strong></p>
-                            <p>Location: Dhaka, Bangladesh</p>
-                        </div>
-                        <button class="btn" onclick="editProfile()">Edit Profile</button>
-                    </div>
-                </section>
-
-                <section id="hospitals" class="content-section"><div class="card"><h3>Emergency Hospitals</h3><button class="btn" onclick="window.open('https://www.google.com/maps/search/maternity+hospital')">Find Nearest Hospital</button></div></section>
+                
+                <section id="vaccine-tracker" class="content-section"><div class="card"><h3>Vaccination</h3><p>Follow your schedule.</p></div></section>
+                <section id="appointments" class="content-section"><div class="card"><h3>Appointments</h3><button class="btn" onclick="addAppointment()">Add New</button></div></section>
+                <section id="blood-donor" class="content-section"><div class="card"><h3>Blood Support</h3></div></section>
+                <section id="ask-assistant" class="content-section"><div class="card"><h3>AI Assistant</h3></div></section>
+                <section id="my-profile" class="content-section"><div class="card"><h3>My Profile</h3></div></section>
 
             </div>
         </main>
