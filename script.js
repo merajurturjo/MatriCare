@@ -1,232 +1,119 @@
-/**
- * MatriCare PRO - Core JavaScript Engine
- * Author: Gemini AI Collaboration
- * Version: 2.5
- * Features: LocalStorage DBMS, Real-time Calculation, UI Navigation
+/** * MatriCare DBMS Engine 
+ * This script handles all page switches and data saving 
  */
 
-// --- 1. DBMS CORE (LocalStorage Wrapper) ---
-const DBMS = {
-    save: (key, data) => localStorage.setItem(`matri_pro_${key}`, JSON.stringify(data)),
-    get: (key) => JSON.parse(localStorage.getItem(`matri_pro_${key}`)) || [],
-    wipe: () => {
-        if (confirm("Are you sure you want to delete ALL medical records? This cannot be undone.")) {
-            localStorage.clear();
-            location.reload();
-        }
-    }
+// --- 1. CORE DATABASE HELPERS ---
+const DB = {
+    save: (key, val) => localStorage.setItem(`mc_${key}`, JSON.stringify(val)),
+    get: (key) => JSON.parse(localStorage.getItem(`mc_${key}`)) || [],
+    reset: () => { localStorage.clear(); location.reload(); }
 };
 
-// --- 2. INITIALIZATION & UI NAVIGATION ---
-document.addEventListener('DOMContentLoaded', () => {
-    initClock();
-    initNavigation();
-    initDashboard();
-    renderJournal();
-    renderAppointments();
-    updateHealthTip();
-    
-    // Global Event Listeners
-    document.getElementById('system-wipe').addEventListener('click', DBMS.wipe);
-    document.getElementById('calc-trigger').addEventListener('click', runPregnancyAlgorithm);
-    document.getElementById('save-journal-btn').addEventListener('click', saveJournalEntry);
-    document.getElementById('add-appt-btn').addEventListener('click', saveAppointment);
-    document.getElementById('t-btn').addEventListener('click', runAITranslator);
+// --- 2. PAGE NAVIGATION ---
+const navItems = document.querySelectorAll('.nav-item');
+const pages = document.querySelectorAll('.page');
+
+navItems.forEach(item => {
+    item.addEventListener('click', () => {
+        const pageID = item.getAttribute('data-page');
+        if (!pageID) return;
+
+        // Toggle Buttons
+        navItems.forEach(nav => nav.classList.remove('active'));
+        item.classList.add('active');
+
+        // Toggle Content
+        pages.forEach(p => p.classList.remove('active'));
+        document.getElementById(pageID).classList.add('active');
+    });
 });
 
-// Navigation Logic
-function initNavigation() {
-    const navItems = document.querySelectorAll('.nav-item');
-    const pages = document.querySelectorAll('.page-view');
-    const breadcrumb = document.getElementById('breadcrumb-current');
-    const viewTitle = document.getElementById('view-title');
+// --- 3. CLOCK ENGINE ---
+setInterval(() => {
+    document.getElementById('clock-display').innerText = new Date().toLocaleTimeString();
+}, 1000);
 
-    navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const target = item.getAttribute('data-target');
-            if (!target) return;
+// --- 4. KICK COUNTER ---
+let kickCount = DB.get('kicks')[0] || 0;
+document.getElementById('db-kick-count').innerText = kickCount;
 
-            // Update Sidebar UI
-            navItems.forEach(nav => nav.classList.remove('active'));
-            item.classList.add('active');
-
-            // Update Page Visibility
-            pages.forEach(page => page.classList.remove('active'));
-            const targetPage = document.getElementById(target);
-            if (targetPage) targetPage.classList.add('active');
-
-            // Update Header Text
-            breadcrumb.innerText = target.charAt(0).toUpperCase() + target.slice(1);
-            viewTitle.innerText = item.querySelector('span').innerText;
-        });
-    });
-}
-
-// --- 3. REAL-TIME CLOCK ---
-function initClock() {
-    const clockElement = document.getElementById('live-clock');
-    setInterval(() => {
-        const now = new Date();
-        clockElement.innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    }, 1000);
-}
-
-// --- 4. PREGNANCY ALGORITHM (The Brain) ---
-function runPregnancyAlgorithm() {
-    const lmpValue = document.getElementById('lmp-input').value;
-    if (!lmpValue) {
-        alert("Please select your Last Menstrual Period (LMP) date.");
-        return;
-    }
-
-    const lmpDate = new Date(lmpValue);
-    const today = new Date();
-    
-    // Difference in time
-    const diffTime = Math.abs(today - lmpDate);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    const weeks = Math.floor(diffDays / 7);
-    const remainingDays = diffDays % 7;
-
-    // Estimated Due Date (LMP + 280 days)
-    const eddDate = new Date(lmpDate);
-    eddDate.setDate(lmpDate.getDate() + 280);
-
-    // Update DBMS & UI
-    DBMS.save('user_stats', { lmp: lmpValue, weeks: weeks, edd: eddDate.toDateString() });
-    updateDashboardUI(weeks, remainingDays, eddDate.toDateString());
-    
-    // Visual Feedback
-    const outputArea = document.getElementById('tracker-output');
-    outputArea.classList.remove('hidden');
-    document.getElementById('res-edd').innerText = eddDate.toDateString();
-    document.getElementById('res-tri').innerText = getTrimester(weeks);
-}
-
-function getTrimester(w) {
-    if (w <= 12) return "1st Trimester";
-    if (w <= 26) return "2nd Trimester";
-    return "3rd Trimester";
-}
-
-// --- 5. DASHBOARD SYNC ---
-function initDashboard() {
-    const stats = DBMS.get('user_stats');
-    const kicks = DBMS.get('kicks')[0] || 0;
-    
-    document.getElementById('db-kicks').innerText = kicks;
-    
-    if (stats.weeks !== undefined) {
-        updateDashboardUI(stats.weeks, 0, stats.edd);
-    }
-}
-
-function updateDashboardUI(weeks, days, edd) {
-    document.getElementById('db-week').innerText = `Week ${weeks}`;
-    document.getElementById('db-days').innerText = `Progress: ${weeks} Weeks Active`;
-    document.getElementById('dash-week').innerText = `Week ${weeks}`;
-    
-    // Update Journey Progress Bar (Max 40 weeks)
-    const progressPercent = Math.min(Math.round((weeks / 40) * 100), 100);
-    document.getElementById('progress-val').innerText = `${progressPercent}%`;
-    document.querySelector('.progress-bar').style.width = `${progressPercent}%`;
-}
-
-// --- 6. FETAL KICK COUNTER ---
-let kickCount = DBMS.get('kicks')[0] || 0;
-function addKick() {
+function recordKick() {
     kickCount++;
-    document.getElementById('db-kicks').innerText = kickCount;
-    DBMS.save('kicks', [kickCount]);
+    document.getElementById('db-kick-count').innerText = kickCount;
+    DB.save('kicks', [kickCount]);
 }
 
-// --- 7. JOURNAL DBMS ---
-function saveJournalEntry() {
-    const text = document.getElementById('j-text').value;
-    if (!text) return;
+// --- 5. PREGNANCY TRACKER ---
+const saveLmpBtn = document.getElementById('save-lmp');
+if (saveLmpBtn) {
+    saveLmpBtn.onclick = () => {
+        const lmpValue = document.getElementById('lmp-date').value;
+        if (!lmpValue) return alert("Select a date!");
 
-    const entries = DBMS.get('journal');
-    entries.push({
-        text: text,
-        date: new Date().toLocaleDateString(),
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    });
-    
-    DBMS.save('journal', entries);
-    document.getElementById('j-text').value = "";
-    renderJournal();
+        const lmpDate = new Date(lmpValue);
+        const today = new Date();
+        const diffWeeks = Math.floor((today - lmpDate) / (1000 * 60 * 60 * 24 * 7));
+        
+        // Save to DB
+        DB.save('stats', { weeks: diffWeeks, lmp: lmpValue });
+        
+        // Update UI
+        updateUI(diffWeeks);
+        
+        const edd = new Date(lmpDate);
+        edd.setDate(edd.getDate() + 280);
+        document.getElementById('out-edd').innerText = edd.toDateString();
+        document.getElementById('out-tri').innerText = diffWeeks < 13 ? "1st" : diffWeeks < 27 ? "2nd" : "3rd";
+        document.getElementById('tracker-res').classList.remove('hidden');
+    };
+}
+
+function updateUI(weeks) {
+    document.getElementById('db-week-count').innerText = `Week ${weeks}`;
+    document.getElementById('db-day-count').innerText = `${weeks * 7} Days in Journey`;
+    const progress = Math.min((weeks / 40) * 100, 100);
+    document.getElementById('master-progress').style.width = progress + "%";
+    document.getElementById('progress-text').innerText = Math.round(progress) + "%";
+}
+
+// --- 6. JOURNAL SYSTEM ---
+const saveJournalBtn = document.getElementById('save-journal');
+if (saveJournalBtn) {
+    saveJournalBtn.onclick = () => {
+        const text = document.getElementById('journal-input').value;
+        if (!text) return;
+
+        const entries = DB.get('journal');
+        entries.push({ text, time: new Date().toLocaleString() });
+        DB.save('journal', entries);
+        
+        document.getElementById('journal-input').value = "";
+        renderJournal();
+    };
 }
 
 function renderJournal() {
-    const entries = DBMS.get('journal');
-    const container = document.getElementById('journal-db-list');
-    container.innerHTML = entries.length ? "" : "<p class='empty-msg'>No records found in database.</p>";
-    
-    entries.reverse().forEach(entry => {
-        const item = document.createElement('div');
-        item.className = 'log-item card';
-        item.innerHTML = `
-            <div class="log-meta"><small>${entry.date} | ${entry.time}</small></div>
-            <p>${entry.text}</p>
-        `;
-        container.appendChild(item);
-    });
+    const list = DB.get('journal');
+    const container = document.getElementById('journal-list');
+    container.innerHTML = list.reverse().map(e => `
+        <div class="log-card">
+            <small style="color:#ff4d6d">${e.time}</small>
+            <p style="margin-top:5px">${e.text}</p>
+        </div>
+    `).join('');
 }
 
-// --- 8. APPOINTMENT MANAGER ---
-function saveAppointment() {
-    const doc = document.getElementById('appt-doc').value;
-    const time = document.getElementById('appt-date').value;
-    
-    if (!doc || !time) return alert("Please fill all fields!");
+// --- 7. TRANSLATOR ---
+document.getElementById('do-trans').onclick = () => {
+    const q = document.getElementById('trans-input').value.toLowerCase();
+    const dict = { "fetus": "ভ্রূণ", "labor": "প্রসব বেদনা", "nausea": "বমি ভাব" };
+    document.getElementById('trans-output').innerText = dict[q] || "Result found in AI database...";
+};
 
-    const appts = DBMS.get('appointments');
-    appts.push({ doc, time: new Date(time).toLocaleString() });
-    DBMS.save('appointments', appts);
-    
-    document.getElementById('appt-doc').value = "";
-    renderAppointments();
-}
-
-function renderAppointments() {
-    const appts = DBMS.get('appointments');
-    const container = document.getElementById('appt-db-list');
-    container.innerHTML = "";
-
-    appts.forEach((a, index) => {
-        const div = document.createElement('div');
-        div.className = 'entry-item';
-        div.innerHTML = `<strong>${a.doc}</strong> - ${a.time}`;
-        container.appendChild(div);
-    });
-}
-
-// --- 9. AI TRANSLATOR & HEALTH TIPS ---
-function runAITranslator() {
-    const query = document.getElementById('t-query').value.toLowerCase().trim();
-    const dictionary = {
-        "amniotic fluid": "অ্যামনিওটিক ফ্লুইড (জরায়ুর জল): গর্ভস্থ শিশুর চারপাশের তরল যা তাকে রক্ষা করে।",
-        "preeclampsia": "প্রিক্ল্যাম্পসিয়া: গর্ভাবস্থায় উচ্চ রক্তচাপজনিত একটি জটিল অবস্থা।",
-        "trimester": "ট্রাইমেস্টার: গর্ভাবস্থার ৯ মাসকে ৩টি ভাগে ভাগ করা হয়, প্রতিটি ৩ মাসকে একটি ট্রাইমেস্টার বলে।",
-        "ultrasound": "আল্ট্রাসাউন্ড: শব্দতরঙ্গের মাধ্যমে গর্ভস্থ শিশুর ছবি দেখার পরীক্ষা।",
-        "labor": "লেবার (প্রসব বেদনা): সন্তান জন্মের আগের শারীরিক প্রক্রিয়া।"
-    };
-
-    const resultBox = document.getElementById('t-output');
-    resultBox.innerHTML = dictionary[query] 
-        ? `<div class="res-card green-border"><strong>Translation:</strong><br>${dictionary[query]}</div>` 
-        : `<div class="res-card red-border">Term not in clinical database. Connecting to Cloud AI...</div>`;
-}
-
-function updateHealthTip() {
-    const tips = [
-        "Drink at least 3 liters of water daily to maintain amniotic fluid levels.",
-        "Walking for 20 minutes daily helps in easier labor.",
-        "Include more fiber in your diet to avoid pregnancy constipation.",
-        "Sleep on your left side to improve blood flow to the placenta.",
-        "Listen to calm music; your baby can start hearing around Week 18!"
-    ];
-    const randomTip = tips[Math.floor(Math.random() * tips.length)];
-    const tipElement = document.getElementById('health-tip');
-    if (tipElement) tipElement.innerText = randomTip;
-}
+// --- INIT APP ---
+window.onload = () => {
+    const stats = DB.get('stats');
+    if (stats.weeks) updateUI(stats.weeks);
+    renderJournal();
+    document.getElementById('reset-db').onclick = () => DB.reset();
+};
