@@ -11,94 +11,94 @@
 
     <div class="app-container">
         <aside class="sidebar">
-            <div class="sidebar-header">
-                <i class="fas fa-hand-holding-heart"></i>
+            <div class="sidebar-brand">
+                <i class="fas fa-heartbeat"></i>
                 <span>MatriCare</span>
             </div>
             
-            <div class="menu-group">
-                <p class="label">Main Menu</p>
-                <ul class="nav-links">
-                    <li class="active" data-target="dashboard"><i class="fas fa-home"></i> Dashboard</li>
-                    <li data-target="tracker"><i class="fas fa-chart-line"></i> Pregnancy Tracker</li>
-                    <li data-target="journal"><i class="fas fa-pen-nib"></i> Daily Journal</li>
+            <div class="sidebar-content">
+                <p class="menu-label">Main</p>
+                <ul class="nav-menu">
+                    <li class="nav-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</li>
+                    <li class="nav-item" data-page="tracker"><i class="fas fa-baby"></i> Pregnancy Tracker</li>
+                    <li class="nav-item" data-page="journal"><i class="fas fa-journal-whills"></i> Health Journal</li>
                 </ul>
 
-                <p class="label">Health Support</p>
-                <ul class="nav-links">
-                    <li data-target="nutrition"><i class="fas fa-utensils"></i> Nutrition</li>
-                    <li data-target="translator"><i class="fas fa-language"></i> AI Translator</li>
-                    <li data-target="myth"><i class="fas fa-lightbulb"></i> Myth Buster</li>
+                <p class="menu-label">Resources</p>
+                <ul class="nav-menu">
+                    <li class="nav-item" data-page="nutrition"><i class="fas fa-apple-alt"></i> Nutrition Guide</li>
+                    <li class="nav-item" data-page="translator"><i class="fas fa-language"></i> AI Translator</li>
+                    <li class="nav-item" data-page="myth"><i class="fas fa-lightbulb"></i> Myth Buster</li>
                 </ul>
 
-                <p class="label">Settings</p>
-                <ul class="nav-links">
-                    <li data-target="profile"><i class="fas fa-user-cog"></i> Profile</li>
-                    <li id="clear-db" class="logout"><i class="fas fa-trash-alt"></i> Reset All Data</li>
+                <p class="menu-label">Account</p>
+                <ul class="nav-menu">
+                    <li class="nav-item" data-page="profile"><i class="fas fa-user-circle"></i> Profile</li>
+                    <li id="reset-system" class="nav-item danger"><i class="fas fa-sync-alt"></i> Reset All Data</li>
                 </ul>
             </div>
         </aside>
 
-        <main class="main-content">
-            <header class="top-nav">
-                <h2 id="current-page">Dashboard</h2>
-                <div class="user-profile">
+        <main class="main-wrapper">
+            <header class="top-bar">
+                <h2 id="header-title">Dashboard</h2>
+                <div class="user-info">
                     <span>Welcome, Mother</span>
                     <img src="https://ui-avatars.com/api/?name=Mom&background=ff4d6d&color=fff" alt="User">
                 </div>
             </header>
 
-            <div class="container">
-                <section id="dashboard" class="page active">
-                    <div class="stats-grid">
-                        <div class="stat-card pink-border" onclick="recordKick()">
+            <div class="main-content">
+                <section id="dashboard" class="content-page active">
+                    <div class="stats-container">
+                        <div class="stat-card pink" onclick="handleKick()">
                             <i class="fas fa-shoe-prints"></i>
-                            <div class="stat-info">
-                                <h3>Fetal Kicks</h3>
-                                <p id="db-kicks">0</p>
+                            <div class="stat-text">
+                                <h3>Total Kicks</h3>
+                                <p id="db-kick-count">0</p>
                             </div>
                         </div>
-                        <div class="stat-card blue-border">
-                            <i class="fas fa-calendar-check"></i>
-                            <div class="stat-info">
+                        <div class="stat-card blue">
+                            <i class="fas fa-calendar-alt"></i>
+                            <div class="stat-text">
                                 <h3>Current Week</h3>
-                                <p id="db-week">--</p>
+                                <p id="db-week-display">--</p>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <section id="tracker" class="page">
-                    <div class="glass-card">
-                        <h3>Pregnancy Progress Analysis</h3>
-                        <p>Select your Last Menstrual Period (LMP) date:</p>
-                        <input type="date" id="lmp-input" class="modern-input">
-                        <button class="btn-main" id="btn-calc">Calculate & Save</button>
-                        <div id="tracker-res" class="result-box"></div>
+                <section id="tracker" class="content-page">
+                    <div class="form-card">
+                        <h3>Analyze Your Progress</h3>
+                        <label>Last Menstrual Period (LMP):</label>
+                        <input type="date" id="lmp-input" class="st-input">
+                        <button class="st-btn" id="calc-trigger">Save & Calculate</button>
+                        <div id="tracker-result" class="status-msg"></div>
                     </div>
                 </section>
 
-                <section id="journal" class="page">
-                    <div class="glass-card">
-                        <h3>Medical & Mood Journal</h3>
-                        <textarea id="j-input" class="modern-input" rows="4" placeholder="How are you feeling today? Any symptoms?"></textarea>
-                        <button class="btn-main" id="btn-save-j">Save to Database</button>
-                        <div id="j-logs" class="logs-container"></div>
+                <section id="journal" class="content-page">
+                    <div class="form-card">
+                        <h3>Health & Mood Diary</h3>
+                        <textarea id="journal-note" class="st-input" rows="4" placeholder="How are you feeling?"></textarea>
+                        <button class="st-btn" id="save-note-btn">Add to Database</button>
+                        <div id="journal-entries" class="entry-list"></div>
                     </div>
                 </section>
 
-                <section id="translator" class="page">
-                    <div class="glass-card">
-                        <h3>AI Medical Dictionary</h3>
-                        <input type="text" id="t-input" class="modern-input" placeholder="Type a term (e.g. Fetus, Labor)">
-                        <button class="btn-main" id="btn-trans">Translate Now</button>
-                        <p id="t-output" class="result-box"></p>
+                <section id="translator" class="content-page">
+                    <div class="form-card">
+                        <h3>Medical AI Dictionary</h3>
+                        <input type="text" id="trans-input" class="st-input" placeholder="Enter term (e.g., Labor)">
+                        <button class="st-btn" id="trans-trigger">Translate to Bengali</button>
+                        <p id="trans-output" class="status-msg"></p>
                     </div>
                 </section>
 
-                <section id="nutrition" class="page"><div class="glass-card"><h3>Nutrition</h3><p>Focus on Vitamin D and Iron.</p></div></section>
-                <section id="myth" class="page"><div class="glass-card"><h3>Myth Buster</h3><p>Fact: Morning sickness can happen at any time of the day.</p></div></section>
-                <section id="profile" class="page"><div class="glass-card"><h3>Profile</h3><p>Manage your MatriCare account.</p></div></section>
+                <section id="nutrition" class="content-page"><div class="form-card"><h3>Nutrition Plan</h3><p>Ensure high protein and calcium intake.</p></div></section>
+                <section id="myth" class="content-page"><div class="form-card"><h3>Myth Buster</h3><p>Myth: Spicy food induces labor. Fact: No scientific proof.</p></div></section>
+                <section id="profile" class="content-page"><div class="form-card"><h3>My Profile</h3><p>Manage your health records here.</p></div></section>
 
             </div>
         </main>
