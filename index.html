@@ -3,318 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatriCare | Maternity Health Tracker</title>
+    <title>MatriCare Premium Dashboard</title>
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-pink: #FFD1DC;
-            --accent-peach: #FFE5B4;
-            --soft-white: #FDFBFA;
-            --glass: rgba(255, 255, 255, 0.7);
-            --text-dark: #333333;
-            --sos-red: #FF6B6B;
-            --shadow: 0 8px 32px 0 rgba(255, 182, 193, 0.1);
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-
-        body {
-            background: linear-gradient(135deg, #FFF5F7 0%, #FFF0E0 100%);
-            color: var(--text-dark);
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* --- SIDEBAR --- */
-        nav {
-            width: 260px;
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            border-right: 1px solid rgba(255,255,255,0.3);
-            display: flex;
-            flex-direction: column;
-            padding: 30px 20px;
-            position: fixed;
-            height: 100vh;
-            z-index: 100;
-        }
-
-        .logo { font-size: 1.4rem; font-weight: 700; color: #D48192; margin-bottom: 40px; text-align: center; }
-
-        nav ul { list-style: none; }
-        nav ul li {
-            padding: 15px;
-            margin-bottom: 8px;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: #666;
-        }
-
-        nav ul li:hover, nav ul li.active {
-            background: white;
-            color: #D48192;
-            box-shadow: var(--shadow);
-        }
-
-        /* --- MAIN AREA --- */
-        main { margin-left: 260px; flex: 1; padding: 40px; }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-
-        .sos-btn {
-            background: var(--sos-red);
-            color: white;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .sos-btn:active { transform: scale(0.95); }
-
-        /* --- BENTO GRID --- */
-        .grid-layout {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-gap: 20px;
-        }
-
-        .card {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.4);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-        }
-
-        .hero-card { grid-column: span 2; display: flex; align-items: center; justify-content: space-between; }
-
-        .circle-progress {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 6px solid var(--primary-pink);
-            font-weight: 700;
-        }
-
-        /* --- FORMS & LISTS --- */
-        .input-box {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        input {
-            padding: 12px 15px;
-            border-radius: 12px;
-            border: 1px solid rgba(0,0,0,0.1);
-            outline: none;
-            flex: 1;
-        }
-
-        .action-btn {
-            background: var(--primary-pink);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .record-list { margin-top: 20px; }
-        .record-item {
-            background: rgba(255,255,255,0.5);
-            padding: 12px 18px;
-            border-radius: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .del-icon { color: #ff6b6b; cursor: pointer; font-size: 0.9rem; border: none; background: none; }
-
-        .hidden { display: none; }
-
-        @media (max-width: 900px) {
-            nav { width: 80px; padding: 20px 10px; }
-            nav .logo, nav ul li span { display: none; }
-            main { margin-left: 80px; padding: 20px; }
-            .grid-layout { grid-template-columns: 1fr; }
-            .hero-card { grid-column: span 1; }
-        }
-    </style>
 </head>
 <body>
 
-    <nav>
+    <nav class="sidebar">
         <div class="logo">MatriCare 🌸</div>
         <ul>
-            <li class="active" onclick="showPage('home')">🏠 <span>Dashboard</span></li>
-            <li onclick="showPage('meds')">💊 <span>Medications</span></li>
-            <li onclick="showPage('donors')">🩸 <span>Donors</span></li>
-            <li onclick="showPage('profile')">👤 <span>Profile</span></li>
+            <li class="nav-item active" onclick="showPage('home')">🏠 <span>Dashboard</span></li>
+            <li class="nav-item" onclick="showPage('meds')">💊 <span>Medications</span></li>
+            <li class="nav-item" onclick="showPage('donors')">🩸 <span>Blood Donors</span></li>
+            <li class="nav-item" onclick="showPage('profile')">👤 <span>My Profile</span></li>
         </ul>
     </nav>
 
-    <main>
-        <header>
-            <div>
-                <h2 id="welcome-text">Health Dashboard</h2>
-                <p style="font-size: 0.9rem; color: #888;">Track your daily progress</p>
+    <main class="content">
+        <header class="top-bar">
+            <div class="welcome">
+                <h2>Health Overview</h2>
+                <p>Track your journey daily</p>
             </div>
-            <button class="sos-btn" onclick="alert('Emergency Alert Sent!')">EMERGENCY SOS</button>
+            <button class="sos-btn" onclick="triggerSOS()">EMERGENCY SOS</button>
         </header>
 
         <section id="home" class="page-content">
-            <div class="grid-layout">
-                <div class="card hero-card">
-                    <div>
-                        <h3>Pregnancy Week</h3>
-                        <p id="week-counter">Week 12, Day 4</p>
+            <div class="bento-grid">
+                <div class="card hero">
+                    <div class="info">
+                        <h3>Pregnancy Status</h3>
+                        <h1 id="week-display">Week 14, Day 2</h1>
                     </div>
-                    <div class="circle-progress">40%</div>
+                    <div class="progress-ring">50%</div>
                 </div>
-                
-                <div class="card">
+                <div class="card kick-card">
                     <h3>Fetal Kicks</h3>
-                    <div style="text-align: center; margin-top: 10px;">
-                        <h2 id="kick-val">0</h2>
-                        <button class="action-btn" style="width: 100%; margin-top: 10px;" onclick="addKick()">Record Kick</button>
-                    </div>
+                    <h2 id="kick-count">0</h2>
+                    <button class="action-btn" onclick="addKick()">Record Kick</button>
                 </div>
-
-                <div class="card">
-                    <h3>Quick Tip</h3>
-                    <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
-                        Ensure you're getting enough folic acid and iron today.
-                    </p>
+                <div class="card tip-card">
+                    <h3>Daily Tip</h3>
+                    <p>"Remember to take a short walk and stay hydrated."</p>
                 </div>
             </div>
         </section>
 
         <section id="meds" class="page-content hidden">
             <div class="card">
-                <h3>Medication Logs</h3>
-                <div class="input-box">
+                <h3>Medication Records</h3>
+                <div class="form-group">
                     <input type="text" id="m-name" placeholder="Medicine Name">
                     <input type="time" id="m-time">
-                    <button class="action-btn" onclick="saveData('meds')">Save</button>
+                    <button class="action-btn" onclick="saveData('meds')">Add Record</button>
                 </div>
-                <div id="med-list" class="record-list"></div>
+                <div id="med-list" class="list-container"></div>
             </div>
         </section>
 
         <section id="donors" class="page-content hidden">
             <div class="card">
-                <h3>Blood Donor Directory</h3>
-                <div class="input-box">
+                <h3>Blood Donor Records</h3>
+                <div class="form-group">
                     <input type="text" id="d-name" placeholder="Donor Name">
                     <input type="text" id="d-group" placeholder="Blood Group">
-                    <button class="action-btn" onclick="saveData('donors')">Add</button>
+                    <button class="action-btn" onclick="saveData('donors')">Save Donor</button>
                 </div>
-                <div id="donor-list" class="record-list"></div>
+                <div id="donor-list" class="list-container"></div>
             </div>
         </section>
 
         <section id="profile" class="page-content hidden">
             <div class="card">
-                <h3>Personal Information</h3>
-                <div style="margin-top: 15px; line-height: 2;">
-                    <p><strong>Status:</strong> Healthy / Active</p>
+                <h3>User Profile</h3>
+                <div class="profile-details">
+                    <p><strong>Status:</strong> Prenatal Care Active</p>
                     <p><strong>Blood Group:</strong> O+ (Positive)</p>
-                    <p><strong>Expected Due Date:</strong> Not Set</p>
+                    <p><strong>Emergency Contact:</strong> Saved</p>
                 </div>
             </div>
         </section>
     </main>
 
-    <script>
-        // Page Navigation
-        function showPage(id) {
-            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
-            document.querySelectorAll('nav li').forEach(l => l.classList.remove('active'));
-            document.getElementById(id).classList.remove('hidden');
-            event.currentTarget.classList.add('active');
-        }
-
-        // Save Data to LocalStorage
-        function saveData(type) {
-            let data = JSON.parse(localStorage.getItem(type) || '[]');
-            
-            if(type === 'meds') {
-                const name = document.getElementById('m-name').value;
-                const time = document.getElementById('m-time').value;
-                if(!name || !time) return;
-                data.push({ name, time, id: Date.now() });
-                document.getElementById('m-name').value = '';
-            } else {
-                const name = document.getElementById('d-name').value;
-                const group = document.getElementById('d-group').value;
-                if(!name || !group) return;
-                data.push({ name, group, id: Date.now() });
-                document.getElementById('d-name').value = '';
-                document.getElementById('d-group').value = '';
-            }
-
-            localStorage.setItem(type, JSON.stringify(data));
-            renderLists();
-        }
-
-        // Render Lists from Storage
-        function renderLists() {
-            // Render Meds
-            const medData = JSON.parse(localStorage.getItem('meds') || '[]');
-            document.getElementById('med-list').innerHTML = medData.map(m => `
-                <div class="record-item">
-                    <span>${m.name} - ${m.time}</span>
-                    <button class="del-icon" onclick="deleteItem('meds', ${m.id})">Delete</button>
-                </div>
-            `).join('');
-
-            // Render Donors
-            const donorData = JSON.parse(localStorage.getItem('donors') || '[]');
-            document.getElementById('donor-list').innerHTML = donorData.map(d => `
-                <div class="record-item">
-                    <span>${d.name} (${d.group})</span>
-                    <button class="del-icon" onclick="deleteItem('donors', ${d.id})">Remove</button>
-                </div>
-            `).join('');
-        }
-
-        // Delete Logic
-        function deleteItem(type, id) {
-            let data = JSON.parse(localStorage.getItem(type));
-            data = data.filter(item => item.id !== id);
-            localStorage.setItem(type, JSON.stringify(data));
-            renderLists();
-        }
-
-        // Simple Kick Counter
-        let count = 0;
-        function addKick() {
-            count++;
-            document.getElementById('kick-val').innerText = count;
-        }
-
-        // Load data on start
-        window.onload = renderLists;
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
