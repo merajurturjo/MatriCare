@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatriCare Premium Dashboard</title>
+    <title>MatriCare | Premium Maternity Tracker</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -11,75 +11,111 @@
 
     <nav class="sidebar">
         <div class="logo">MatriCare 🌸</div>
-        <ul>
-            <li class="nav-item active" onclick="showPage('home')">🏠 <span>Dashboard</span></li>
-            <li class="nav-item" onclick="showPage('meds')">💊 <span>Medications</span></li>
-            <li class="nav-item" onclick="showPage('donors')">🩸 <span>Blood Donors</span></li>
-            <li class="nav-item" onclick="showPage('profile')">👤 <span>My Profile</span></li>
+        <ul class="nav-links">
+            <li class="nav-item active" onclick="switchSection('dashboard')">🏠 Dashboard</li>
+            <li class="nav-item" onclick="switchSection('meds')">💊 Medications</li>
+            <li class="nav-item" onclick="switchSection('diet')">🥗 Food Logger</li>
+            <li class="nav-item" onclick="switchSection('donors')">🩸 Blood Donors</li>
+            <li class="nav-item" onclick="switchSection('dictionary')">📖 Dictionary</li>
+            <li class="nav-item" onclick="switchSection('profile')">👤 My Profile</li>
         </ul>
     </nav>
 
     <main class="content">
         <header class="top-bar">
-            <div class="welcome">
-                <h2>Health Overview</h2>
-                <p>Track your journey daily</p>
+            <div class="user-greeting">
+                <h2 id="section-title">Dashboard</h2>
+                <p>Track your health journey seamlessly</p>
             </div>
-            <button class="sos-btn" onclick="triggerSOS()">EMERGENCY SOS</button>
+            <button class="sos-button" onclick="triggerSOS()">EMERGENCY SOS</button>
         </header>
 
-        <section id="home" class="page-content">
+        <section id="dashboard" class="page-section">
             <div class="bento-grid">
-                <div class="card hero">
-                    <div class="info">
-                        <h3>Pregnancy Status</h3>
-                        <h1 id="week-display">Week 14, Day 2</h1>
+                <div class="card hero-card">
+                    <div class="hero-text">
+                        <h3>Pregnancy Progress</h3>
+                        <p id="week-display">Week 24 • Day 3</p>
                     </div>
-                    <div class="progress-ring">50%</div>
+                    <div class="progress-container">
+                        <svg class="progress-ring" width="100" height="100">
+                            <circle class="ring-bg" cx="50" cy="50" r="40"></circle>
+                            <circle class="ring-bar" cx="50" cy="50" r="40"></circle>
+                        </svg>
+                        <span class="progress-val">60%</span>
+                    </div>
                 </div>
+                
                 <div class="card kick-card">
                     <h3>Fetal Kicks</h3>
-                    <h2 id="kick-count">0</h2>
+                    <h1 id="kick-count">0</h1>
                     <button class="action-btn" onclick="addKick()">Record Kick</button>
                 </div>
+
                 <div class="card tip-card">
-                    <h3>Daily Tip</h3>
-                    <p>"Remember to take a short walk and stay hydrated."</p>
+                    <h3>Daily Health Tip</h3>
+                    <p id="daily-tip">"Stay hydrated! Aim for 8-10 glasses of water to support your baby's growth."</p>
                 </div>
             </div>
         </section>
 
-        <section id="meds" class="page-content hidden">
+        <section id="meds" class="page-section hidden">
             <div class="card">
-                <h3>Medication Records</h3>
-                <div class="form-group">
-                    <input type="text" id="m-name" placeholder="Medicine Name">
-                    <input type="time" id="m-time">
-                    <button class="action-btn" onclick="saveData('meds')">Add Record</button>
+                <h3>Add Medication</h3>
+                <div class="form-row">
+                    <input type="text" id="med-name" placeholder="Medicine Name">
+                    <input type="time" id="med-time">
+                    <button class="action-btn" onclick="saveData('meds')">Add</button>
                 </div>
-                <div id="med-list" class="list-container"></div>
+                <div id="med-list" class="record-container"></div>
             </div>
         </section>
 
-        <section id="donors" class="page-content hidden">
+        <section id="diet" class="page-section hidden">
             <div class="card">
-                <h3>Blood Donor Records</h3>
-                <div class="form-group">
-                    <input type="text" id="d-name" placeholder="Donor Name">
-                    <input type="text" id="d-group" placeholder="Blood Group">
-                    <button class="action-btn" onclick="saveData('donors')">Save Donor</button>
+                <h3>Meal Logger</h3>
+                <div class="form-row">
+                    <select id="meal-type">
+                        <option value="Breakfast">Breakfast</option>
+                        <option value="Lunch">Lunch</option>
+                        <option value="Dinner">Dinner</option>
+                        <option value="Snacks">Snacks</option>
+                    </select>
+                    <input type="text" id="food-item" placeholder="What did you eat?">
+                    <button class="action-btn" onclick="saveData('diet')">Log</button>
                 </div>
-                <div id="donor-list" class="list-container"></div>
+                <div id="diet-list" class="record-container"></div>
             </div>
         </section>
 
-        <section id="profile" class="page-content hidden">
+        <section id="donors" class="page-section hidden">
             <div class="card">
-                <h3>User Profile</h3>
-                <div class="profile-details">
-                    <p><strong>Status:</strong> Prenatal Care Active</p>
+                <h3>Donor Directory</h3>
+                <div class="form-row">
+                    <input type="text" id="donor-name" placeholder="Name">
+                    <input type="text" id="donor-group" placeholder="Blood Group">
+                    <input type="text" id="donor-phone" placeholder="Phone">
+                    <button class="action-btn" onclick="saveData('donors')">Save</button>
+                </div>
+                <div id="donor-list" class="record-container"></div>
+            </div>
+        </section>
+
+        <section id="dictionary" class="page-section hidden">
+            <div class="card">
+                <h3>Medical Dictionary</h3>
+                <input type="text" id="dict-search" placeholder="Search terms (e.g. Anemia, Placenta)..." onkeyup="searchDictionary()">
+                <div id="dict-output" class="dict-box">Type a term to see the explanation.</div>
+            </div>
+        </section>
+
+        <section id="profile" class="page-section hidden">
+            <div class="card">
+                <h3>My Profile</h3>
+                <div class="profile-info">
                     <p><strong>Blood Group:</strong> O+ (Positive)</p>
-                    <p><strong>Emergency Contact:</strong> Saved</p>
+                    <p><strong>Due Date:</strong> August 15, 2026</p>
+                    <p><strong>Emergency Contact:</strong> Primary Family Member</p>
                 </div>
             </div>
         </section>
