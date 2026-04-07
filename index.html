@@ -3,142 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatriCare | Your Pregnancy Companion</title>
+    <title>MatriCare | Premium Companion</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="brand">
-                <i class="fas fa-baby-carriage"></i>
-                <span>MatriCare</span>
+    <div class="app-shell">
+        <nav class="floating-nav">
+            <div class="nav-logo">
+                <div class="logo-box"><i class="fas fa-heart"></i></div>
             </div>
+            <div class="nav-links">
+                <div class="nav-item active" data-target="home" title="Home"><i class="fas fa-house"></i></div>
+                <div class="nav-item" data-target="tracker" title="Tracker"><i class="fas fa-seedling"></i></div>
+                <div class="nav-item" data-target="records" title="Health History"><i class="fas fa-folder-open"></i></div>
+                <div class="nav-item" data-target="diet" title="Diet Plan"><i class="fas fa-apple-whole"></i></div>
+                <div class="nav-item" data-target="medical" title="AI Dictionary"><i class="fas fa-microscope"></i></div>
+            </div>
+            <div class="nav-footer">
+                <div class="nav-item sos" data-target="sos"><i class="fas fa-phone-flip"></i></div>
+                <div class="nav-item reset" id="global-reset"><i class="fas fa-power-off"></i></div>
+            </div>
+        </nav>
 
-            <nav class="menu">
-                <div class="menu-item active" data-target="home"><i class="fas fa-home"></i> Home</div>
-                <div class="menu-item" data-target="tracker"><i class="fas fa-calendar-alt"></i> Journey Tracker</div>
-                <div class="menu-item" data-target="records"><i class="fas fa-clipboard-list"></i> Health Records</div>
-                <div class="menu-item" data-target="doctor"><i class="fas fa-user-md"></i> Doctor Visits</div>
-                <div class="menu-item" data-target="meds"><i class="fas fa-pills"></i> Medications</div>
-                <div class="menu-item" data-target="diet"><i class="fas fa-apple-alt"></i> Diet & Food</div>
-                <div class="menu-item" data-target="dictionary"><i class="fas fa-book-medical"></i> Medical Terms</div>
-                
-                <div class="menu-bottom">
-                    <div class="menu-item sos" data-target="sos"><i class="fas fa-phone-alt"></i> Emergency SOS</div>
-                    <div class="menu-item reset" id="clear-all"><i class="fas fa-trash-alt"></i> Clear Data</div>
+        <main class="main-stage">
+            <header class="glass-header">
+                <div class="greeting">
+                    <span id="live-time">00:00 AM</span>
+                    <h1>Hello, <strong>Bushra</strong> ✨</h1>
                 </div>
-            </nav>
-        </aside>
-
-        <main class="main-content">
-            <header class="top-bar">
-                <div class="page-info">
-                    <h2 id="current-view">Home</h2>
-                    <p id="live-date">Welcome back!</p>
-                </div>
-                <div class="profile-section">
-                    <div class="user-text text-right">
-                        <strong>Bushra</strong>
-                        <small>Week 24 • 2nd Trimester</small>
-                    </div>
-                    <img src="https://ui-avatars.com/api/?name=Bushra&background=ff4d6d&color=fff" class="avatar">
+                <div class="user-pill">
+                    <div class="status-dot"></div>
+                    <span>2nd Trimester</span>
+                    <img src="https://ui-avatars.com/api/?name=Bushra&background=ffb3c1&color=fff" class="user-img">
                 </div>
             </header>
 
-            <div class="content-wrapper">
+            <div class="stage-content">
                 
                 <section id="home" class="page active">
-                    <div class="welcome-card">
-                        <div class="text">
-                            <h1>Everything is on track! ✨</h1>
-                            <p>You've completed <span id="percent-val">0%</span> of your pregnancy journey. Keep it up!</p>
-                            <div class="bar-bg"><div class="bar-fill" id="main-progress"></div></div>
-                        </div>
-                        <div class="visual"><i class="fas fa-heartbeat"></i></div>
-                    </div>
-
-                    <div class="stats-grid">
-                        <div class="stat-card pink" onclick="addKick()">
-                            <i class="fas fa-shoe-prints"></i>
-                            <div class="stat-text">
-                                <h3>Fetal Kicks</h3>
-                                <p id="kick-val">0</p>
-                                <small>Tap to record</small>
+                    <div class="bento-grid">
+                        <div class="bento-card welcome-hero">
+                            <div class="hero-info">
+                                <h2>Your Journey Progress</h2>
+                                <p>You are doing amazing! Baby is growing well.</p>
+                                <div class="progress-container">
+                                    <svg class="prog-svg" viewBox="0 0 100 100">
+                                        <circle class="bg" cx="50" cy="50" r="45"></circle>
+                                        <circle class="fg" cx="50" cy="50" r="45" id="circle-progress"></circle>
+                                    </svg>
+                                    <div class="prog-text"><span id="pct">0</span>%</div>
+                                </div>
                             </div>
                         </div>
-                        <div class="stat-card blue">
-                            <i class="fas fa-clock"></i>
-                            <div class="stat-text">
-                                <h3>Time Left</h3>
-                                <p id="days-val">--</p>
-                                <small>Days to go</small>
+
+                        <div class="bento-card stat-pill pink" onclick="countKick()">
+                            <div class="pill-icon"><i class="fas fa-shoe-prints"></i></div>
+                            <div class="pill-data">
+                                <span class="label">Fetal Kicks</span>
+                                <h3 id="kick-count">0</h3>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="tip-box">
-                        <h4><i class="fas fa-lightbulb"></i> Daily Tip</h4>
-                        <p>Drinking enough water is crucial for your baby's amniotic fluid levels. Try to have 8-10 glasses today.</p>
+                        <div class="bento-card stat-pill blue">
+                            <div class="pill-icon"><i class="fas fa-hourglass-half"></i></div>
+                            <div class="pill-data">
+                                <span class="label">Days to Due</span>
+                                <h3 id="days-left">--</h3>
+                            </div>
+                        </div>
+
+                        <div class="bento-card insight-card">
+                            <h3><i class="fas fa-wand-magic-sparkles"></i> Daily Insight</h3>
+                            <p id="daily-quote">"A mother's joy begins when new life is stirring inside."</p>
+                        </div>
                     </div>
                 </section>
 
                 <section id="tracker" class="page">
-                    <div class="form-container">
-                        <h3>Update Your Journey</h3>
-                        <p>Please enter your Last Menstrual Period (LMP) date to calculate your progress.</p>
-                        <input type="date" id="lmp-date" class="nice-input">
-                        <button class="action-btn" id="calc-btn">Synchronize My Data</button>
-                        
-                        <div id="result-box" class="res-box hidden">
-                            <div class="res-item"><span>Expected Due Date:</span> <strong id="due-date-val">--</strong></div>
-                            <div class="res-item"><span>Current Trimester:</span> <strong id="tri-val">--</strong></div>
+                    <div class="form-wrapper">
+                        <div class="glass-card">
+                            <h2>Pregnancy Engine</h2>
+                            <p>Select your Last Menstrual Period (LMP) to sync data.</p>
+                            <div class="input-group">
+                                <input type="date" id="lmp-input">
+                                <button class="btn-shine" id="sync-btn">Calculate Now</button>
+                            </div>
+                            <div id="tracker-output" class="result-grid hidden">
+                                <div class="res-card"><span>Due Date</span><h4 id="out-edd">--</h4></div>
+                                <div class="res-card"><span>Current Week</span><h4 id="out-week">--</h4></div>
+                            </div>
                         </div>
                     </div>
                 </section>
 
                 <section id="records" class="page">
-                    <div class="record-layout">
-                        <div class="entry-form">
-                            <h3>Write New Note</h3>
-                            <textarea id="note-input" placeholder="How are you feeling? Any specific symptoms?" rows="5" class="nice-input"></textarea>
-                            <button class="action-btn" id="save-note">Save to History</button>
+                    <div class="records-layout">
+                        <div class="glass-card entry-box">
+                            <h3>Add Health Note</h3>
+                            <textarea id="note-txt" placeholder="Describe symptoms or feelings..."></textarea>
+                            <button class="btn-shine" id="note-save">Save Record</button>
                         </div>
-                        <div class="entry-list">
-                            <h3>Your Health History</h3>
-                            <div id="history-feed" class="history-container">
-                                </div>
-                        </div>
+                        <div class="history-stack" id="history-box">
+                            </div>
                     </div>
                 </section>
 
-                <section id="doctor" class="page">
-                    <div class="form-container">
-                        <h3>Schedule Doctor Visit</h3>
-                        <input type="text" id="doc-name" placeholder="Doctor's Name" class="nice-input">
-                        <input type="datetime-local" id="doc-time" class="nice-input">
-                        <button class="action-btn" id="save-apt">Book Appointment</button>
-                        <div id="apt-feed" class="mt-20"></div>
-                    </div>
-                </section>
-
-                <section id="dictionary" class="page">
-                    <div class="form-container">
+                <section id="medical" class="page">
+                    <div class="glass-card">
                         <h3>Medical AI Dictionary</h3>
-                        <input type="text" id="dic-input" placeholder="Search term (e.g. Trimester)" class="nice-input">
-                        <button class="action-btn" id="dic-btn">Define Term</button>
-                        <div id="dic-output" class="res-box mt-20"></div>
+                        <div class="search-wrap">
+                            <input type="text" id="dic-q" placeholder="Search term (e.g. Ultrasound)">
+                            <button id="dic-go"><i class="fas fa-search"></i></button>
+                        </div>
+                        <div id="dic-res" class="res-box"></div>
                     </div>
                 </section>
 
                 <section id="sos" class="page">
-                    <div class="sos-card">
-                        <h2>Emergency Response</h2>
-                        <p>Need immediate help? Click below to call.</p>
-                        <button class="sos-btn" onclick="alert('Calling Emergency...')">Call Ambulance</button>
-                        <button class="sos-btn doctor" onclick="alert('Calling Doctor...')">Call Doctor</button>
+                    <div class="sos-container">
+                        <div class="sos-card">
+                            <div class="sos-icon"><i class="fas fa-kit-medical"></i></div>
+                            <h2>Need Immediate Help?</h2>
+                            <p>Contact emergency services or your doctor instantly.</p>
+                            <div class="sos-actions">
+                                <a href="tel:999" class="sos-btn red">Call Ambulance</a>
+                                <a href="#" class="sos-btn blue">Call My Doctor</a>
+                            </div>
+                        </div>
                     </div>
                 </section>
 
