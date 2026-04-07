@@ -3,113 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatriCare PRO | Home</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>MatriCare | Maternity Health Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #FFD1DC;
+            --accent-peach: #FFE5B4;
+            --soft-white: #FDFBFA;
+            --glass: rgba(255, 255, 255, 0.7);
+            --text-dark: #333333;
+            --sos-red: #FF6B6B;
+            --shadow: 0 8px 32px 0 rgba(255, 182, 193, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #FFF5F7 0%, #FFF0E0 100%);
+            color: var(--text-dark);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR --- */
+        nav {
+            width: 260px;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-right: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            flex-direction: column;
+            padding: 30px 20px;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .logo { font-size: 1.4rem; font-weight: 700; color: #D48192; margin-bottom: 40px; text-align: center; }
+
+        nav ul { list-style: none; }
+        nav ul li {
+            padding: 15px;
+            margin-bottom: 8px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #666;
+        }
+
+        nav ul li:hover, nav ul li.active {
+            background: white;
+            color: #D48192;
+            box-shadow: var(--shadow);
+        }
+
+        /* --- MAIN AREA --- */
+        main { margin-left: 260px; flex: 1; padding: 40px; }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .sos-btn {
+            background: var(--sos-red);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .sos-btn:active { transform: scale(0.95); }
+
+        /* --- BENTO GRID --- */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 20px;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-card { grid-column: span 2; display: flex; align-items: center; justify-content: space-between; }
+
+        .circle-progress {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 6px solid var(--primary-pink);
+            font-weight: 700;
+        }
+
+        /* --- FORMS & LISTS --- */
+        .input-box {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        input {
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(0,0,0,0.1);
+            outline: none;
+            flex: 1;
+        }
+
+        .action-btn {
+            background: var(--primary-pink);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .record-list { margin-top: 20px; }
+        .record-item {
+            background: rgba(255,255,255,0.5);
+            padding: 12px 18px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .del-icon { color: #ff6b6b; cursor: pointer; font-size: 0.9rem; border: none; background: none; }
+
+        .hidden { display: none; }
+
+        @media (max-width: 900px) {
+            nav { width: 80px; padding: 20px 10px; }
+            nav .logo, nav ul li span { display: none; }
+            main { margin-left: 80px; padding: 20px; }
+            .grid-layout { grid-template-columns: 1fr; }
+            .hero-card { grid-column: span 1; }
+        }
+    </style>
 </head>
 <body>
 
-    <div class="container">
-        <aside class="sidebar">
-            <div class="logo">
-                <i class="fas fa-hand-holding-heart"></i>
-                <span>MatriCare</span>
+    <nav>
+        <div class="logo">MatriCare 🌸</div>
+        <ul>
+            <li class="active" onclick="showPage('home')">🏠 <span>Dashboard</span></li>
+            <li onclick="showPage('meds')">💊 <span>Medications</span></li>
+            <li onclick="showPage('donors')">🩸 <span>Donors</span></li>
+            <li onclick="showPage('profile')">👤 <span>Profile</span></li>
+        </ul>
+    </nav>
+
+    <main>
+        <header>
+            <div>
+                <h2 id="welcome-text">Health Dashboard</h2>
+                <p style="font-size: 0.9rem; color: #888;">Track your daily progress</p>
             </div>
-            <nav class="nav-menu">
-                <div class="nav-item active" data-target="home"><i class="fas fa-th-large"></i> Dashboard</div>
-                <div class="nav-item" data-target="meds"><i class="fas fa-pills"></i> Medications</div>
-                <div class="nav-item" data-target="diet"><i class="fas fa-utensils"></i> Diet & Food</div>
-                <div class="nav-item" data-target="blood"><i class="fas fa-droplet"></i> Blood Donors</div>
-                <div class="nav-item" data-target="profile"><i class="fas fa-user-circle"></i> My Profile</div>
-                <div class="nav-item sos" data-target="sos"><i class="fas fa-phone-alt"></i> Emergency</div>
-            </nav>
-        </aside>
+            <button class="sos-btn" onclick="alert('Emergency Alert Sent!')">EMERGENCY SOS</button>
+        </header>
 
-        <main class="main-content">
-            <header class="top-nav">
-                <div class="header-text">
-                    <h2 id="page-title">Dashboard</h2>
-                    <p>Welcome back, <span id="user-header-name">Bushra</span></p>
+        <section id="home" class="page-content">
+            <div class="grid-layout">
+                <div class="card hero-card">
+                    <div>
+                        <h3>Pregnancy Week</h3>
+                        <p id="week-counter">Week 12, Day 4</p>
+                    </div>
+                    <div class="circle-progress">40%</div>
                 </div>
-                <div class="user-info">
-                    <img src="https://ui-avatars.com/api/?name=Rowsan+Ara+Bushra&background=ff758c&color=fff" alt="User">
+                
+                <div class="card">
+                    <h3>Fetal Kicks</h3>
+                    <div style="text-align: center; margin-top: 10px;">
+                        <h2 id="kick-val">0</h2>
+                        <button class="action-btn" style="width: 100%; margin-top: 10px;" onclick="addKick()">Record Kick</button>
+                    </div>
                 </div>
-            </header>
 
-            <div class="content-body">
-                <section id="home" class="page active">
-                    <div class="hero-banner">
-                        <h1>Health First, Always. ✨</h1>
-                        <p>Track your pregnancy journey with precision and care.</p>
-                    </div>
-                </section>
-
-                <section id="meds" class="page">
-                    <div class="card">
-                        <h3><i class="fas fa-clock"></i> Medicine Reminder</h3>
-                        <div class="form-group">
-                            <input type="text" id="med-name" placeholder="Medicine Name">
-                            <input type="time" id="med-time">
-                            <button class="btn-primary" onclick="addMed()">Add Med</button>
-                        </div>
-                        <div id="med-list" class="list-display"></div>
-                    </div>
-                </section>
-
-                <section id="diet" class="page">
-                    <div class="card">
-                        <h3><i class="fas fa-apple-whole"></i> Meal Logger</h3>
-                        <div class="form-group">
-                            <select id="meal-type">
-                                <option>Breakfast</option>
-                                <option>Lunch</option>
-                                <option>Dinner</option>
-                            </select>
-                            <input type="text" id="food-val" placeholder="What's on the menu?">
-                            <button class="btn-primary" onclick="addDiet()">Record</button>
-                        </div>
-                        <div id="diet-list" class="list-display"></div>
-                    </div>
-                </section>
-
-                <section id="blood" class="page">
-                    <div class="card">
-                        <h3><i class="fas fa-heart"></i> Donor Directory</h3>
-                        <div class="form-group">
-                            <input type="text" id="d-name" placeholder="Donor Name">
-                            <input type="text" id="d-group" placeholder="Blood Group">
-                            <input type="text" id="d-phone" placeholder="Contact Number">
-                            <button class="btn-primary" onclick="addDonor()">Save Donor</button>
-                        </div>
-                        <div id="donor-list" class="list-display"></div>
-                    </div>
-                </section>
-
-                <section id="profile" class="page">
-                    <div class="card profile-card">
-                        <h3>My Information</h3>
-                        <div class="profile-form">
-                            <label>Name</label>
-                            <input type="text" id="p-name" value="Rowsan Ara Bushra">
-                            <label>Blood Group</label>
-                            <input type="text" id="p-blood" placeholder="Enter your blood group">
-                            <button class="btn-primary full" onclick="saveProfile()">Save Profile</button>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="sos" class="page">
-                    <div class="sos-card">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <h2>Emergency Response</h2>
-                        <a href="tel:999" class="sos-btn">Call Ambulance</a>
-                    </div>
-                </section>
+                <div class="card">
+                    <h3>Quick Tip</h3>
+                    <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+                        Ensure you're getting enough folic acid and iron today.
+                    </p>
+                </div>
             </div>
-        </main>
-    </div>
+        </section>
 
-    <script src="script.js"></script>
+        <section id="meds" class="page-content hidden">
+            <div class="card">
+                <h3>Medication Logs</h3>
+                <div class="input-box">
+                    <input type="text" id="m-name" placeholder="Medicine Name">
+                    <input type="time" id="m-time">
+                    <button class="action-btn" onclick="saveData('meds')">Save</button>
+                </div>
+                <div id="med-list" class="record-list"></div>
+            </div>
+        </section>
+
+        <section id="donors" class="page-content hidden">
+            <div class="card">
+                <h3>Blood Donor Directory</h3>
+                <div class="input-box">
+                    <input type="text" id="d-name" placeholder="Donor Name">
+                    <input type="text" id="d-group" placeholder="Blood Group">
+                    <button class="action-btn" onclick="saveData('donors')">Add</button>
+                </div>
+                <div id="donor-list" class="record-list"></div>
+            </div>
+        </section>
+
+        <section id="profile" class="page-content hidden">
+            <div class="card">
+                <h3>Personal Information</h3>
+                <div style="margin-top: 15px; line-height: 2;">
+                    <p><strong>Status:</strong> Healthy / Active</p>
+                    <p><strong>Blood Group:</strong> O+ (Positive)</p>
+                    <p><strong>Expected Due Date:</strong> Not Set</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Page Navigation
+        function showPage(id) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('nav li').forEach(l => l.classList.remove('active'));
+            document.getElementById(id).classList.remove('hidden');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Save Data to LocalStorage
+        function saveData(type) {
+            let data = JSON.parse(localStorage.getItem(type) || '[]');
+            
+            if(type === 'meds') {
+                const name = document.getElementById('m-name').value;
+                const time = document.getElementById('m-time').value;
+                if(!name || !time) return;
+                data.push({ name, time, id: Date.now() });
+                document.getElementById('m-name').value = '';
+            } else {
+                const name = document.getElementById('d-name').value;
+                const group = document.getElementById('d-group').value;
+                if(!name || !group) return;
+                data.push({ name, group, id: Date.now() });
+                document.getElementById('d-name').value = '';
+                document.getElementById('d-group').value = '';
+            }
+
+            localStorage.setItem(type, JSON.stringify(data));
+            renderLists();
+        }
+
+        // Render Lists from Storage
+        function renderLists() {
+            // Render Meds
+            const medData = JSON.parse(localStorage.getItem('meds') || '[]');
+            document.getElementById('med-list').innerHTML = medData.map(m => `
+                <div class="record-item">
+                    <span>${m.name} - ${m.time}</span>
+                    <button class="del-icon" onclick="deleteItem('meds', ${m.id})">Delete</button>
+                </div>
+            `).join('');
+
+            // Render Donors
+            const donorData = JSON.parse(localStorage.getItem('donors') || '[]');
+            document.getElementById('donor-list').innerHTML = donorData.map(d => `
+                <div class="record-item">
+                    <span>${d.name} (${d.group})</span>
+                    <button class="del-icon" onclick="deleteItem('donors', ${d.id})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        // Delete Logic
+        function deleteItem(type, id) {
+            let data = JSON.parse(localStorage.getItem(type));
+            data = data.filter(item => item.id !== id);
+            localStorage.setItem(type, JSON.stringify(data));
+            renderLists();
+        }
+
+        // Simple Kick Counter
+        let count = 0;
+        function addKick() {
+            count++;
+            document.getElementById('kick-val').innerText = count;
+        }
+
+        // Load data on start
+        window.onload = renderLists;
+    </script>
 </body>
 </html>
