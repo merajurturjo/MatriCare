@@ -1,68 +1,661 @@
+/* MatriCare Premium Stylesheet 
+    Theme: Soft Pink & Pearl White 
+    Focus: Professionalism, Smooth UI, Clarity
+*/
+
 :root {
-    --bg: #fdf0f4;
-    --accent: #ff4d6d;
-    --soft-pink: #ffb3c1;
-    --text: #2d3436;
-    --glass: rgba(255, 255, 255, 0.7);
-    --shadow: 0 20px 40px rgba(255, 77, 109, 0.1);
+    --primary: #ff4d6d;
+    --primary-light: #fff0f3;
+    --primary-hover: #ff758c;
+    --bg-main: #fcf6f7;
+    --text-main: #2d3436;
+    --text-muted: #636e72;
+    --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.85);
+    --shadow-soft: 0 10px 30px rgba(255, 77, 109, 0.08);
+    --shadow-strong: 0 15px 35px rgba(255, 77, 109, 0.15);
+    --radius: 20px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
+/* 1. Reset & Global Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
 
-.app-shell { display: flex; height: 100vh; padding: 20px; gap: 20px; }
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    height: 100vh;
+    overflow: hidden; /* App feel: no scroll on body */
+}
 
-/* FLOATING NAV */
+/* 2. Main Layout Shell */
+.app-shell {
+    display: flex;
+    height: 100vh;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* 3. Floating Navigation (Sidebar) */
 .floating-nav {
-    width: 80px; background: var(--glass); backdrop-filter: blur(15px);
-    border-radius: 30px; display: flex; flex-direction: column;
-    align-items: center; padding: 30px 0; border: 1px solid white; box-shadow: var(--shadow);
+    width: 90px;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 35px 0;
+    border: 1px solid white;
+    box-shadow: var(--shadow-soft);
 }
-.logo-box { width: 45px; height: 45px; background: var(--accent); border-radius: 15px; display: flex; align-items: center; justify-content: center; color: white; margin-bottom: 50px; }
-.nav-links { flex: 1; display: flex; flex-direction: column; gap: 25px; }
-.nav-item { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 15px; cursor: pointer; color: var(--text); transition: 0.3s; font-size: 1.2rem; }
-.nav-item:hover, .nav-item.active { background: var(--accent); color: white; transform: scale(1.1); box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3); }
-.sos { color: #d63031; border: 1px solid #d63031; margin-bottom: 15px; }
 
-/* MAIN STAGE */
-.main-stage { flex: 1; display: flex; flex-direction: column; gap: 20px; }
-.glass-header { 
-    background: var(--glass); backdrop-filter: blur(10px); padding: 20px 40px; 
-    border-radius: 25px; display: flex; justify-content: space-between; align-items: center; border: 1px solid white;
+.logo-box {
+    width: 50px;
+    height: 50px;
+    background: var(--primary);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.4rem;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 15px rgba(255, 77, 109, 0.3);
 }
-.greeting h1 { font-size: 1.8rem; font-weight: 800; }
-.greeting span { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); font-weight: 600; }
-.user-pill { background: white; padding: 8px 20px; border-radius: 50px; display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow); }
-.user-img { width: 35px; border-radius: 50%; }
-.status-dot { width: 8px; height: 8px; background: #00b894; border-radius: 50%; box-shadow: 0 0 10px #00b894; }
 
-/* BENTO GRID */
-.stage-content { flex: 1; overflow-y: auto; padding-right: 10px; }
-.bento-grid { display: grid; grid-template-columns: 2fr 1fr; grid-template-rows: auto auto; gap: 20px; }
-.bento-card { background: var(--glass); backdrop-filter: blur(10px); border-radius: 30px; border: 1px solid white; padding: 30px; box-shadow: var(--shadow); }
+.nav-links {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
 
-.welcome-hero { grid-row: span 2; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #fff, #fff0f3); }
-.progress-container { position: relative; width: 180px; height: 180px; margin-top: 20px; }
-.prog-svg { transform: rotate(-90deg); }
-.prog-svg circle { fill: none; stroke-width: 8; }
-.prog-svg .bg { stroke: #eee; }
-.prog-svg .fg { stroke: var(--accent); stroke-dasharray: 283; stroke-dashoffset: 283; stroke-linecap: round; transition: 1s; }
-.prog-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 2rem; font-weight: 800; }
+.nav-item {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: var(--transition);
+    font-size: 1.3rem;
+}
 
-.stat-pill { display: flex; align-items: center; gap: 20px; cursor: pointer; transition: 0.3s; }
-.stat-pill:hover { transform: translateY(-5px); background: white; }
-.pill-icon { width: 60px; height: 60px; background: var(--primary-light); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
-.pink .pill-icon { color: var(--accent); background: #fff0f3; }
-.blue .pill-icon { color: #0984e3; background: #e1f5fe; }
+.nav-item:hover, .nav-item.active {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.08);
+    box-shadow: 0 10px 20px rgba(255, 77, 109, 0.25);
+}
 
-/* FORMS & UI */
-.page { display: none; animation: slideUp 0.5s ease forwards; }
-.page.active { display: block; }
-@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+.sos {
+    color: #e84393;
+    border: 1px dashed #e84393;
+}
 
-.glass-card { background: white; padding: 40px; border-radius: 30px; box-shadow: var(--shadow); border: 1px solid white; }
-input, textarea { width: 100%; padding: 15px 25px; border-radius: 15px; border: 2px solid #f1f2f6; outline: none; margin: 15px 0; font-size: 1rem; }
-.btn-shine { width: 100%; padding: 18px; border: none; border-radius: 15px; background: var(--accent); color: white; font-weight: 800; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(255, 77, 109, 0.2); }
-.btn-shine:hover { opacity: 0.9; transform: scale(0.98); }
+/* 4. Main Stage (Content Area) */
+.main-stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
-.history-card { background: white; padding: 20px; border-radius: 20px; margin-bottom: 15px; border-left: 6px solid var(--accent); box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
+.glass-header {
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    padding: 20px 40px;
+    border-radius: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid white;
+    box-shadow: var(--shadow-soft);
+}
+
+.glass-header h1 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.user-pill {
+    background: white;
+    padding: 8px 15px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    border: 1px solid #f1f2f6;
+}
+
+#user-display-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.user-img {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-light);
+}
+
+/* 5. Content View Management */
+.stage-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.page {
+    display: none;
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 6. Professional Cards & Elements */
+.glass-card {
+    background: white;
+    padding: 35px;
+    border-radius: 30px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid white;
+    margin-bottom: 25px;
+}
+
+.glass-card h3 {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--primary);
+    font-size: 1.3rem;
+}
+
+/* Input Fields */
+.input-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+input, select, textarea {
+    padding: 14px 20px;
+    border-radius: 15px;
+    border: 2px solid #f1f2f6;
+    outline: none;
+    font-size: 0.95rem;
+    transition: var(--transition);
+    background: #fafbfc;
+}
+
+input:focus, select:focus {
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+/* Buttons */
+.btn-add {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 14px 25px;
+    border-radius: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-add:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+}
+
+.btn-shine {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    color: white;
+    border: none;
+    border-radius: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: var(--transition);
+}
+
+/* 7. Feature Specific Lists */
+.item-card {
+    background: white;
+    padding: 18px 25px;
+    border-radius: 18px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #f1f2f6;
+    transition: var(--transition);
+}
+
+.item-card:hover {
+    border-color: var(--primary-light);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+}
+
+.item-card i.fa-trash {
+    color: #ff7675;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+.item-card i.fa-trash:hover {
+    background: #fff0f0;
+    color: #d63031;
+}
+
+/* 8. Profile Section */
+.profile-detail label {
+    display: block;
+    margin: 15px 0 8px 5px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.profile-detail input {
+    width: 100%;
+}
+
+/* 9. SOS Card */
+.sos-card {
+    background: linear-gradient(135deg, #fff, #fff5f5);
+    padding: 50px;
+    border-radius: 30px;
+    text-align: center;
+    border: 2px dashed #ff7675;
+}
+
+.sos-card i {
+    font-size: 4rem;
+    color: #ff7675;
+    margin-bottom: 20px;
+}
+
+.sos-btn {
+    width: 100%;
+    max-width: 300px;
+    padding: 20px;
+    border-radius: 20px;
+    background: #ff7675;
+    color: white;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 10px 20px rgba(255, 118, 117, 0.3);
+}
+
+/* Custom Scrollbar */
+.stage-content::-webkit-scrollbar {
+    width: 6px;
+}
+.stage-content::-webkit-scrollbar-thumb {
+    background: #eee;
+    border-radius: 10px;
+}/* MatriCare Premium Stylesheet 
+    Theme: Soft Pink & Pearl White 
+    Focus: Professionalism, Smooth UI, Clarity
+*/
+
+:root {
+    --primary: #ff4d6d;
+    --primary-light: #fff0f3;
+    --primary-hover: #ff758c;
+    --bg-main: #fcf6f7;
+    --text-main: #2d3436;
+    --text-muted: #636e72;
+    --white: #ffffff;
+    --glass: rgba(255, 255, 255, 0.85);
+    --shadow-soft: 0 10px 30px rgba(255, 77, 109, 0.08);
+    --shadow-strong: 0 15px 35px rgba(255, 77, 109, 0.15);
+    --radius: 20px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 1. Reset & Global Base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    height: 100vh;
+    overflow: hidden; /* App feel: no scroll on body */
+}
+
+/* 2. Main Layout Shell */
+.app-shell {
+    display: flex;
+    height: 100vh;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* 3. Floating Navigation (Sidebar) */
+.floating-nav {
+    width: 90px;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 35px 0;
+    border: 1px solid white;
+    box-shadow: var(--shadow-soft);
+}
+
+.logo-box {
+    width: 50px;
+    height: 50px;
+    background: var(--primary);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.4rem;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 15px rgba(255, 77, 109, 0.3);
+}
+
+.nav-links {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.nav-item {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: var(--transition);
+    font-size: 1.3rem;
+}
+
+.nav-item:hover, .nav-item.active {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.08);
+    box-shadow: 0 10px 20px rgba(255, 77, 109, 0.25);
+}
+
+.sos {
+    color: #e84393;
+    border: 1px dashed #e84393;
+}
+
+/* 4. Main Stage (Content Area) */
+.main-stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.glass-header {
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    padding: 20px 40px;
+    border-radius: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid white;
+    box-shadow: var(--shadow-soft);
+}
+
+.glass-header h1 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.user-pill {
+    background: white;
+    padding: 8px 15px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+    border: 1px solid #f1f2f6;
+}
+
+#user-display-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.user-img {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-light);
+}
+
+/* 5. Content View Management */
+.stage-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.page {
+    display: none;
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 6. Professional Cards & Elements */
+.glass-card {
+    background: white;
+    padding: 35px;
+    border-radius: 30px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid white;
+    margin-bottom: 25px;
+}
+
+.glass-card h3 {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--primary);
+    font-size: 1.3rem;
+}
+
+/* Input Fields */
+.input-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+input, select, textarea {
+    padding: 14px 20px;
+    border-radius: 15px;
+    border: 2px solid #f1f2f6;
+    outline: none;
+    font-size: 0.95rem;
+    transition: var(--transition);
+    background: #fafbfc;
+}
+
+input:focus, select:focus {
+    border-color: var(--primary);
+    background: white;
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+/* Buttons */
+.btn-add {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 14px 25px;
+    border-radius: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-add:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+}
+
+.btn-shine {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    color: white;
+    border: none;
+    border-radius: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: var(--transition);
+}
+
+/* 7. Feature Specific Lists */
+.item-card {
+    background: white;
+    padding: 18px 25px;
+    border-radius: 18px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #f1f2f6;
+    transition: var(--transition);
+}
+
+.item-card:hover {
+    border-color: var(--primary-light);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+}
+
+.item-card i.fa-trash {
+    color: #ff7675;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+.item-card i.fa-trash:hover {
+    background: #fff0f0;
+    color: #d63031;
+}
+
+/* 8. Profile Section */
+.profile-detail label {
+    display: block;
+    margin: 15px 0 8px 5px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.profile-detail input {
+    width: 100%;
+}
+
+/* 9. SOS Card */
+.sos-card {
+    background: linear-gradient(135deg, #fff, #fff5f5);
+    padding: 50px;
+    border-radius: 30px;
+    text-align: center;
+    border: 2px dashed #ff7675;
+}
+
+.sos-card i {
+    font-size: 4rem;
+    color: #ff7675;
+    margin-bottom: 20px;
+}
+
+.sos-btn {
+    width: 100%;
+    max-width: 300px;
+    padding: 20px;
+    border-radius: 20px;
+    background: #ff7675;
+    color: white;
+    border: none;
+    font-size: 1.2rem;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 10px 20px rgba(255, 118, 117, 0.3);
+}
+
+/* Custom Scrollbar */
+.stage-content::-webkit-scrollbar {
+    width: 6px;
+}
+.stage-content::-webkit-scrollbar-thumb {
+    background: #eee;
+    border-radius: 10px;
+}
