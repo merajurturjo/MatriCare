@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatriCare | Premium Companion</title>
+    <title>MatriCare Premium</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,134 +12,108 @@
 
     <div class="app-shell">
         <nav class="floating-nav">
-            <div class="nav-logo">
-                <div class="logo-box"><i class="fas fa-heart"></i></div>
-            </div>
+            <div class="nav-logo"><div class="logo-box"><i class="fas fa-heart"></i></div></div>
             <div class="nav-links">
                 <div class="nav-item active" data-target="home" title="Home"><i class="fas fa-house"></i></div>
-                <div class="nav-item" data-target="tracker" title="Tracker"><i class="fas fa-seedling"></i></div>
-                <div class="nav-item" data-target="records" title="Health History"><i class="fas fa-folder-open"></i></div>
-                <div class="nav-item" data-target="diet" title="Diet Plan"><i class="fas fa-apple-whole"></i></div>
-                <div class="nav-item" data-target="medical" title="AI Dictionary"><i class="fas fa-microscope"></i></div>
+                <div class="nav-item" data-target="meds" title="Medications"><i class="fas fa-pills"></i></div>
+                <div class="nav-item" data-target="diet" title="Diet & Food"><i class="fas fa-apple-whole"></i></div>
+                <div class="nav-item" data-target="blood" title="Blood Donors"><i class="fas fa-drop"></i></div>
+                <div class="nav-item" data-target="profile" title="My Profile"><i class="fas fa-user-circle"></i></div>
             </div>
             <div class="nav-footer">
                 <div class="nav-item sos" data-target="sos"><i class="fas fa-phone-flip"></i></div>
-                <div class="nav-item reset" id="global-reset"><i class="fas fa-power-off"></i></div>
             </div>
         </nav>
 
         <main class="main-stage">
             <header class="glass-header">
-                <div class="greeting">
-                    <span id="live-time">00:00 AM</span>
-                    <h1>Hello, <strong>Bushra</strong> ✨</h1>
-                </div>
+                <h1 id="view-title">Home</h1>
                 <div class="user-pill">
-                    <div class="status-dot"></div>
-                    <span>2nd Trimester</span>
-                    <img src="https://ui-avatars.com/api/?name=Bushra&background=ffb3c1&color=fff" class="user-img">
+                    <span id="user-display-name">Rowsan Ara Bushra</span>
+                    <img src="https://ui-avatars.com/api/?name=Bushra&background=ff4d6d&color=fff" class="user-img">
                 </div>
             </header>
 
             <div class="stage-content">
                 
                 <section id="home" class="page active">
-                    <div class="bento-grid">
-                        <div class="bento-card welcome-hero">
-                            <div class="hero-info">
-                                <h2>Your Journey Progress</h2>
-                                <p>You are doing amazing! Baby is growing well.</p>
-                                <div class="progress-container">
-                                    <svg class="prog-svg" viewBox="0 0 100 100">
-                                        <circle class="bg" cx="50" cy="50" r="45"></circle>
-                                        <circle class="fg" cx="50" cy="50" r="45" id="circle-progress"></circle>
-                                    </svg>
-                                    <div class="prog-text"><span id="pct">0</span>%</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="bento-card stat-pill pink" onclick="countKick()">
-                            <div class="pill-icon"><i class="fas fa-shoe-prints"></i></div>
-                            <div class="pill-data">
-                                <span class="label">Fetal Kicks</span>
-                                <h3 id="kick-count">0</h3>
-                            </div>
-                        </div>
-
-                        <div class="bento-card stat-pill blue">
-                            <div class="pill-icon"><i class="fas fa-hourglass-half"></i></div>
-                            <div class="pill-data">
-                                <span class="label">Days to Due</span>
-                                <h3 id="days-left">--</h3>
-                            </div>
-                        </div>
-
-                        <div class="bento-card insight-card">
-                            <h3><i class="fas fa-wand-magic-sparkles"></i> Daily Insight</h3>
-                            <p id="daily-quote">"A mother's joy begins when new life is stirring inside."</p>
-                        </div>
+                    <div class="welcome-card">
+                        <h2>Welcome Back!</h2>
+                        <p>Keep tracking your health daily for a safe journey.</p>
                     </div>
                 </section>
 
-                <section id="tracker" class="page">
-                    <div class="form-wrapper">
-                        <div class="glass-card">
-                            <h2>Pregnancy Engine</h2>
-                            <p>Select your Last Menstrual Period (LMP) to sync data.</p>
-                            <div class="input-group">
-                                <input type="date" id="lmp-input">
-                                <button class="btn-shine" id="sync-btn">Calculate Now</button>
-                            </div>
-                            <div id="tracker-output" class="result-grid hidden">
-                                <div class="res-card"><span>Due Date</span><h4 id="out-edd">--</h4></div>
-                                <div class="res-card"><span>Current Week</span><h4 id="out-week">--</h4></div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section id="records" class="page">
-                    <div class="records-layout">
-                        <div class="glass-card entry-box">
-                            <h3>Add Health Note</h3>
-                            <textarea id="note-txt" placeholder="Describe symptoms or feelings..."></textarea>
-                            <button class="btn-shine" id="note-save">Save Record</button>
-                        </div>
-                        <div class="history-stack" id="history-box">
-                            </div>
-                    </div>
-                </section>
-
-                <section id="medical" class="page">
+                <section id="meds" class="page">
                     <div class="glass-card">
-                        <h3>Medical AI Dictionary</h3>
-                        <div class="search-wrap">
-                            <input type="text" id="dic-q" placeholder="Search term (e.g. Ultrasound)">
-                            <button id="dic-go"><i class="fas fa-search"></i></button>
+                        <h3><i class="fas fa-pills"></i> Medicine Reminder</h3>
+                        <div class="input-row">
+                            <input type="text" id="med-name" placeholder="Medicine Name">
+                            <input type="time" id="med-time">
+                            <button class="btn-add" onclick="addMed()">Add</button>
                         </div>
-                        <div id="dic-res" class="res-box"></div>
+                        <div id="med-list" class="list-container"></div>
+                    </div>
+                </section>
+
+                <section id="diet" class="page">
+                    <div class="glass-card">
+                        <h3><i class="fas fa-utensils"></i> Daily Diet Plan</h3>
+                        <div class="input-row">
+                            <select id="meal-type">
+                                <option value="Breakfast">Breakfast</option>
+                                <option value="Lunch">Lunch</option>
+                                <option value="Dinner">Dinner</option>
+                                <option value="Snack">Snack</option>
+                            </select>
+                            <input type="text" id="food-item" placeholder="What did you eat?">
+                            <button class="btn-add" onclick="addDiet()">Record</button>
+                        </div>
+                        <div id="diet-list" class="list-container"></div>
+                    </div>
+                </section>
+
+                <section id="blood" class="page">
+                    <div class="glass-card">
+                        <h3><i class="fas fa-drop"></i> Blood Donor Contacts</h3>
+                        <div class="input-row">
+                            <input type="text" id="donor-name" placeholder="Name">
+                            <select id="blood-group">
+                                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                                <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+                            </select>
+                            <input type="text" id="donor-phone" placeholder="Phone">
+                            <button class="btn-add" onclick="addDonor()">Save</button>
+                        </div>
+                        <div id="donor-list" class="list-container"></div>
+                    </div>
+                </section>
+
+                <section id="profile" class="page">
+                    <div class="glass-card profile-box">
+                        <h3>My Profile</h3>
+                        <div class="profile-detail">
+                            <label>Full Name</label>
+                            <input type="text" id="p-name" value="Rowsan Ara Bushra">
+                            <label>Blood Group</label>
+                            <input type="text" id="p-blood" placeholder="e.g. B+">
+                            <label>Emergency Contact</label>
+                            <input type="text" id="p-emergency" placeholder="Phone number">
+                            <button class="btn-shine" onclick="saveProfile()">Update Profile</button>
+                        </div>
                     </div>
                 </section>
 
                 <section id="sos" class="page">
-                    <div class="sos-container">
-                        <div class="sos-card">
-                            <div class="sos-icon"><i class="fas fa-kit-medical"></i></div>
-                            <h2>Need Immediate Help?</h2>
-                            <p>Contact emergency services or your doctor instantly.</p>
-                            <div class="sos-actions">
-                                <a href="tel:999" class="sos-btn red">Call Ambulance</a>
-                                <a href="#" class="sos-btn blue">Call My Doctor</a>
-                            </div>
-                        </div>
+                    <div class="sos-card">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <h2>Emergency SOS</h2>
+                        <button class="sos-btn" onclick="window.location.href='tel:999'">Call Ambulance</button>
                     </div>
                 </section>
 
             </div>
         </main>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
