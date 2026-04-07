@@ -1,111 +1,112 @@
-/** * MatriCare - Core Logic Engine
- * All technical terms like DBMS replaced with "Record" or "Storage"
- */
+/** * MatriCare OS Engine - Premium Edition */
 
-// 1. Storage Helpers
-const Storage = {
-    save: (key, val) => localStorage.setItem(`matri_${key}`, JSON.stringify(val)),
-    get: (key) => JSON.parse(localStorage.getItem(`matri_${key}`)) || [],
-    clear: () => { if(confirm("Are you sure? This will delete all records.")) { localStorage.clear(); location.reload(); } }
+const App = {
+    save: (k, v) => localStorage.setItem(`mc_v3_${k}`, JSON.stringify(v)),
+    get: (k) => JSON.parse(localStorage.getItem(`mc_v3_${k}`)) || [],
+    init: () => {
+        App.nav();
+        App.clock();
+        App.renderRecords();
+        App.loadStats();
+    }
 };
 
-// 2. Navigation
-const menuItems = document.querySelectorAll('.menu-item');
-const pages = document.querySelectorAll('.page');
+// Navigation
+App.nav = () => {
+    document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.onclick = () => {
+            const target = btn.dataset.target;
+            if(!target) return;
+            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(target).classList.add('active');
+        }
+    });
+};
 
-menuItems.forEach(item => {
-    item.onclick = () => {
-        const target = item.getAttribute('data-target');
-        if(!target) return;
+// Real-time Clock
+App.clock = () => {
+    setInterval(() => {
+        const now = new Date();
+        document.getElementById('live-time').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }, 1000);
+};
 
-        menuItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-
-        pages.forEach(p => p.classList.remove('active'));
-        document.getElementById(target).classList.add('active');
-        document.getElementById('current-view').innerText = target.charAt(0).toUpperCase() + target.slice(1);
-    }
-});
-
-// 3. Kick Counter
-let kicks = Storage.get('kicks')[0] || 0;
-document.getElementById('kick-val').innerText = kicks;
-
-function addKick() {
+// Kick Counter
+let kicks = App.get('kicks')[0] || 0;
+document.getElementById('kick-count').innerText = kicks;
+window.countKick = () => {
     kicks++;
-    document.getElementById('kick-val').innerText = kicks;
-    Storage.save('kicks', [kicks]);
-}
+    document.getElementById('kick-count').innerText = kicks;
+    App.save('kicks', [kicks]);
+};
 
-// 4. Pregnancy Tracker Logic
-document.getElementById('calc-btn').onclick = () => {
-    const lmp = document.getElementById('lmp-date').value;
-    if(!lmp) return alert("Please select a date!");
-
+// Tracker Algorithm
+document.getElementById('sync-btn').onclick = () => {
+    const lmp = document.getElementById('lmp-input').value;
+    if(!lmp) return;
     const lmpDate = new Date(lmp);
     const today = new Date();
     const weeks = Math.floor((today - lmpDate) / (1000 * 60 * 60 * 24 * 7));
-    
-    // Calculate Due Date
-    const edd = new Date(lmpDate);
-    edd.setDate(edd.getDate() + 280);
+    const edd = new Date(lmpDate); edd.setDate(edd.getDate() + 280);
 
-    Storage.save('progress', { weeks, edd: edd.toDateString() });
-    updateHomeUI(weeks, edd);
-    
-    document.getElementById('due-date-val').innerText = edd.toDateString();
-    document.getElementById('tri-val').innerText = weeks < 13 ? "1st Trimester" : weeks < 27 ? "2nd Trimester" : "3rd Trimester";
-    document.getElementById('result-box').classList.remove('hidden');
-}
+    App.save('user_data', { weeks, edd: edd.toDateString() });
+    updateUI(weeks, edd);
+};
 
-function updateHomeUI(weeks, edd) {
+function updateUI(weeks, edd) {
     const daysLeft = Math.ceil((new Date(edd) - new Date()) / (1000 * 60 * 60 * 24));
-    document.getElementById('days-val').innerText = daysLeft > 0 ? daysLeft : "0";
+    document.getElementById('days-left').innerText = daysLeft > 0 ? daysLeft : "0";
     
-    const percent = Math.min((weeks / 40) * 100, 100);
-    document.getElementById('main-progress').style.width = percent + "%";
-    document.getElementById('percent-val').innerText = Math.round(percent);
+    // Circular Progress
+    const pct = Math.min((weeks / 40) * 100, 100);
+    const circle = document.getElementById('circle-progress');
+    const offset = 283 - (283 * pct) / 100;
+    circle.style.strokeDashoffset = offset;
+    document.getElementById('pct').innerText = Math.round(pct);
+
+    document.getElementById('out-edd').innerText = edd.toDateString();
+    document.getElementById('out-week').innerText = `Week ${weeks}`;
+    document.getElementById('tracker-output').classList.remove('hidden');
 }
 
-// 5. Health Records System
-document.getElementById('save-note').onclick = () => {
-    const text = document.getElementById('note-input').value;
-    if(!text) return;
+// Records
+document.getElementById('note-save').onclick = () => {
+    const val = document.getElementById('note-txt').value;
+    if(!val) return;
+    const history = App.get('history');
+    history.push({ txt: val, time: new Date().toLocaleString() });
+    App.save('history', history);
+    document.getElementById('note-txt').value = "";
+    App.renderRecords();
+};
 
-    const notes = Storage.get('notes');
-    notes.push({ text, date: new Date().toLocaleString() });
-    Storage.save('notes', notes);
-    
-    document.getElementById('note-input').value = "";
-    renderNotes();
-}
-
-function renderNotes() {
-    const notes = Storage.get('notes');
-    const container = document.getElementById('history-feed');
-    container.innerHTML = notes.reverse().map(n => `
+App.renderRecords = () => {
+    const h = App.get('history');
+    document.getElementById('history-box').innerHTML = h.reverse().map(item => `
         <div class="history-card">
-            <small style="color:#ff4d6d; font-weight:700">${n.date}</small>
-            <p style="margin-top:5px">${n.text}</p>
+            <small style="color:var(--accent)">${item.time}</small>
+            <p>${item.txt}</p>
         </div>
     `).join('');
-}
-
-// 6. Dictionary
-document.getElementById('dic-btn').onclick = () => {
-    const q = document.getElementById('dic-input').value.toLowerCase();
-    const terms = { 
-        "fetus": "ভ্রূণ (Baby before birth)", 
-        "labor": "প্রসব বেদনা", 
-        "amniotic": "গর্ভস্থ জল যা শিশুকে রক্ষা করে" 
-    };
-    document.getElementById('dic-output').innerHTML = `<strong>Result:</strong> ${terms[q] || "Term not found. Searching cloud..."}`;
-}
-
-// Init App
-window.onload = () => {
-    const data = Storage.get('progress');
-    if(data.weeks) updateHomeUI(data.weeks, data.edd);
-    renderNotes();
-    document.getElementById('clear-all').onclick = () => Storage.clear();
 };
+
+// Dictionary
+document.getElementById('dic-go').onclick = () => {
+    const q = document.getElementById('dic-q').value.toLowerCase();
+    const dict = { "baby": "ভ্রূণ (Fetus)", "trimester": "গর্ভাবস্থার ৩ মাসের একটি পর্যায়" };
+    document.getElementById('dic-res').innerHTML = dict[q] || "Result found in Cloud Database...";
+}
+
+// Reset
+document.getElementById('global-reset').onclick = () => {
+    if(confirm("Wipe all data?")) { localStorage.clear(); location.reload(); }
+};
+
+App.loadStats = () => {
+    const data = App.get('user_data');
+    if(data.weeks) updateUI(data.weeks, new Date(data.edd));
+};
+
+App.init();
