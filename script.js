@@ -1,112 +1,123 @@
-/** * MatriCare OS Engine - Premium Edition */
-
-const App = {
-    save: (k, v) => localStorage.setItem(`mc_v3_${k}`, JSON.stringify(v)),
-    get: (k) => JSON.parse(localStorage.getItem(`mc_v3_${k}`)) || [],
-    init: () => {
-        App.nav();
-        App.clock();
-        App.renderRecords();
-        App.loadStats();
-    }
+// Storage Helper
+const DB = {
+    save: (key, data) => localStorage.setItem(`matri_${key}`, JSON.stringify(data)),
+    get: (key) => JSON.parse(localStorage.getItem(`matri_${key}`)) || []
 };
 
 // Navigation
-App.nav = () => {
-    document.querySelectorAll('.nav-item').forEach(btn => {
-        btn.onclick = () => {
-            const target = btn.dataset.target;
-            if(!target) return;
-            document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(target).classList.add('active');
-        }
-    });
-};
+document.querySelectorAll('.nav-item').forEach(item => {
+    item.onclick = () => {
+        const target = item.dataset.target;
+        if(!target) return;
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(target).classList.add('active');
+        document.getElementById('view-title').innerText = target.toUpperCase();
+    }
+});
 
-// Real-time Clock
-App.clock = () => {
-    setInterval(() => {
-        const now = new Date();
-        document.getElementById('live-time').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    }, 1000);
-};
+// --- MEDICATIONS ---
+function addMed() {
+    const name = document.getElementById('med-name').value;
+    const time = document.getElementById('med-time').value;
+    if(!name || !time) return alert("Fill all fields");
 
-// Kick Counter
-let kicks = App.get('kicks')[0] || 0;
-document.getElementById('kick-count').innerText = kicks;
-window.countKick = () => {
-    kicks++;
-    document.getElementById('kick-count').innerText = kicks;
-    App.save('kicks', [kicks]);
-};
-
-// Tracker Algorithm
-document.getElementById('sync-btn').onclick = () => {
-    const lmp = document.getElementById('lmp-input').value;
-    if(!lmp) return;
-    const lmpDate = new Date(lmp);
-    const today = new Date();
-    const weeks = Math.floor((today - lmpDate) / (1000 * 60 * 60 * 24 * 7));
-    const edd = new Date(lmpDate); edd.setDate(edd.getDate() + 280);
-
-    App.save('user_data', { weeks, edd: edd.toDateString() });
-    updateUI(weeks, edd);
-};
-
-function updateUI(weeks, edd) {
-    const daysLeft = Math.ceil((new Date(edd) - new Date()) / (1000 * 60 * 60 * 24));
-    document.getElementById('days-left').innerText = daysLeft > 0 ? daysLeft : "0";
-    
-    // Circular Progress
-    const pct = Math.min((weeks / 40) * 100, 100);
-    const circle = document.getElementById('circle-progress');
-    const offset = 283 - (283 * pct) / 100;
-    circle.style.strokeDashoffset = offset;
-    document.getElementById('pct').innerText = Math.round(pct);
-
-    document.getElementById('out-edd').innerText = edd.toDateString();
-    document.getElementById('out-week').innerText = `Week ${weeks}`;
-    document.getElementById('tracker-output').classList.remove('hidden');
+    const meds = DB.get('meds');
+    meds.push({ name, time, id: Date.now() });
+    DB.save('meds', meds);
+    renderMeds();
 }
 
-// Records
-document.getElementById('note-save').onclick = () => {
-    const val = document.getElementById('note-txt').value;
-    if(!val) return;
-    const history = App.get('history');
-    history.push({ txt: val, time: new Date().toLocaleString() });
-    App.save('history', history);
-    document.getElementById('note-txt').value = "";
-    App.renderRecords();
-};
-
-App.renderRecords = () => {
-    const h = App.get('history');
-    document.getElementById('history-box').innerHTML = h.reverse().map(item => `
-        <div class="history-card">
-            <small style="color:var(--accent)">${item.time}</small>
-            <p>${item.txt}</p>
+function renderMeds() {
+    const meds = DB.get('meds');
+    document.getElementById('med-list').innerHTML = meds.map(m => `
+        <div class="item-card">
+            <span><strong>${m.name}</strong> at ${m.time}</span>
+            <i class="fas fa-trash" onclick="deleteItem('meds', ${m.id}, renderMeds)"></i>
         </div>
     `).join('');
-};
-
-// Dictionary
-document.getElementById('dic-go').onclick = () => {
-    const q = document.getElementById('dic-q').value.toLowerCase();
-    const dict = { "baby": "ভ্রূণ (Fetus)", "trimester": "গর্ভাবস্থার ৩ মাসের একটি পর্যায়" };
-    document.getElementById('dic-res').innerHTML = dict[q] || "Result found in Cloud Database...";
 }
 
-// Reset
-document.getElementById('global-reset').onclick = () => {
-    if(confirm("Wipe all data?")) { localStorage.clear(); location.reload(); }
-};
+// --- DIET ---
+function addDiet() {
+    const type = document.getElementById('meal-type').value;
+    const food = document.getElementById('food-item').value;
+    if(!food) return;
 
-App.loadStats = () => {
-    const data = App.get('user_data');
-    if(data.weeks) updateUI(data.weeks, new Date(data.edd));
-};
+    const diets = DB.get('diets');
+    diets.push({ type, food, id: Date.now() });
+    DB.save('diets', diets);
+    renderDiet();
+}
 
-App.init();
+function renderDiet() {
+    const diets = DB.get('diets');
+    document.getElementById('diet-list').innerHTML = diets.map(d => `
+        <div class="item-card">
+            <span><strong>${d.type}:</strong> ${d.food}</span>
+            <i class="fas fa-trash" onclick="deleteItem('diets', ${d.id}, renderDiet)"></i>
+        </div>
+    `).join('');
+}
+
+// --- BLOOD DONOR ---
+function addDonor() {
+    const name = document.getElementById('donor-name').value;
+    const grp = document.getElementById('blood-group').value;
+    const phone = document.getElementById('donor-phone').value;
+    if(!name || !phone) return;
+
+    const donors = DB.get('donors');
+    donors.push({ name, grp, phone, id: Date.now() });
+    DB.save('donors', donors);
+    renderDonors();
+}
+
+function renderDonors() {
+    const donors = DB.get('donors');
+    document.getElementById('donor-list').innerHTML = donors.map(d => `
+        <div class="item-card">
+            <span>${d.grp} | <strong>${d.name}</strong> - ${d.phone}</span>
+            <a href="tel:${d.phone}"><i class="fas fa-phone"></i></a>
+        </div>
+    `).join('');
+}
+
+// --- PROFILE ---
+function saveProfile() {
+    const name = document.getElementById('p-name').value;
+    const blood = document.getElementById('p-blood').value;
+    const emergency = document.getElementById('p-emergency').value;
+    
+    const profile = { name, blood, emergency };
+    DB.save('profile', profile);
+    document.getElementById('user-display-name').innerText = name;
+    alert("Profile Updated Successfully!");
+}
+
+function loadProfile() {
+    const p = JSON.parse(localStorage.getItem('matri_profile'));
+    if(p) {
+        document.getElementById('p-name').value = p.name;
+        document.getElementById('p-blood').value = p.blood;
+        document.getElementById('p-emergency').value = p.emergency;
+        document.getElementById('user-display-name').innerText = p.name;
+    }
+}
+
+// --- GLOBAL DELETE ---
+function deleteItem(key, id, callback) {
+    let items = DB.get(key);
+    items = items.filter(i => i.id !== id);
+    DB.save(key, items);
+    callback();
+}
+
+// INITIAL LOAD
+window.onload = () => {
+    renderMeds();
+    renderDiet();
+    renderDonors();
+    loadProfile();
+};
