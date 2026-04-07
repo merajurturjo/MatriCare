@@ -1,109 +1,92 @@
-/**
- * MatriCare Core Logic
- * Handles Navigation, Health Tracking, and UI Updates
- */
+// --- DBMS SIMULATION (LOCAL STORAGE) ---
+const db = {
+    save: (key, data) => localStorage.setItem(key, JSON.stringify(data)),
+    get: (key) => JSON.parse(localStorage.getItem(key)) || [],
+    clear: () => { localStorage.clear(); location.reload(); }
+};
 
-// 1. Navigation System
-function navigate(sectionId, event) {
-    // Switch Active Sections
-    document.querySelectorAll('.page-section').forEach(section => {
-        section.classList.remove('active');
+// --- NAVIGATION LOGIC ---
+document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', function() {
+        const target = this.getAttribute('data-target');
+        if(!target) return;
+
+        document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        
+        document.getElementById(target).classList.add('active');
+        this.classList.add('active');
+        document.getElementById('page-title').innerText = target.toUpperCase();
     });
-    document.getElementById(sectionId).classList.add('active');
+});
 
-    // Update Sidebar Styling
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    event.currentTarget.classList.add('active');
+// --- KICK COUNTER LOGIC ---
+let kicks = db.get('kicks_count')[0] || 0;
+document.getElementById('stat-kicks').innerText = kicks;
 
-    // Update Header Title
-    document.getElementById('page-title').innerText = sectionId.replace('-', ' ').toUpperCase();
+function addKick() {
+    kicks++;
+    document.getElementById('stat-kicks').innerText = kicks;
+    db.save('kicks_count', [kicks]);
 }
 
-// 2. Pregnancy Tracker Core
-function handleCalculator() {
-    const lmpValue = document.getElementById('input-lmp').value;
-    if (!lmpValue) return alert("Please select your Last Menstrual Period date.");
+// --- PREGNANCY TRACKER LOGIC ---
+document.getElementById('calc-btn').addEventListener('click', () => {
+    const lmp = document.getElementById('lmp-date').value;
+    if(!lmp) return alert("Select LMP Date");
 
-    const lmpDate = new Date(lmpValue);
+    const lmpDate = new Date(lmp);
     const today = new Date();
-    
-    // Calculate EDD (LMP + 280 Days)
-    const edd = new Date(lmpDate);
-    edd.setDate(lmpDate.getDate() + 280);
-
-    // Calculate Week
     const diffWeeks = Math.floor((today - lmpDate) / (1000 * 60 * 60 * 24 * 7));
-
-    // Update UI
-    const output = document.getElementById('calculator-output');
-    output.innerHTML = `
-        <div style="margin-top:20px; padding:20px; background:#0d1117; border-radius:12px; border-left: 5px solid var(--primary-red);">
-            <h3>Due Date: ${edd.toDateString()}</h3>
-            <p>Status: You are currently in <strong>Week ${diffWeeks}</strong></p>
-        </div>
-    `;
-
-    // Visual Feedback
-    const icon = document.getElementById('baby-emoji');
-    const label = document.getElementById('baby-size-label');
     
-    document.getElementById('stat-week-display').innerText = "Week " + diffWeeks;
+    const output = document.getElementById('tracker-output');
+    output.innerHTML = `Current Status: Week ${diffWeeks}`;
+    document.getElementById('stat-week').innerText = "Week " + diffWeeks;
+    
+    db.save('user_week', [diffWeeks]);
+});
 
-    if (diffWeeks <= 12) { icon.innerText = "🍋"; label.innerText = "Size: Small Lime"; }
-    else if (diffWeeks <= 20) { icon.innerText = "🍌"; label.innerText = "Size: Banana"; }
-    else if (diffWeeks <= 30) { icon.innerText = "🥬"; label.innerText = "Size: Cabbage"; }
-    else { icon.innerText = "👶"; label.innerText = "Size: Fully Grown Baby"; }
+// --- JOURNAL DBMS LOGIC ---
+function loadJournal() {
+    const history = db.get('journal_entries');
+    const container = document.getElementById('journal-history');
+    container.innerHTML = "";
+    history.reverse().forEach(entry => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.innerHTML = `<strong>${entry.date}:</strong> ${entry.text}`;
+        container.appendChild(div);
+    });
 }
 
-// 3. Fetal Kick Counter
-let kickCount = 0;
-function addKickCount() {
-    kickCount++;
-    document.getElementById('stat-kick-display').innerText = kickCount;
-}
+document.getElementById('save-journal').addEventListener('click', () => {
+    const text = document.getElementById('journal-input').value;
+    if(!text) return;
 
-// 4. Journal Persistence
-function saveJournalEntry() {
-    const entry = document.getElementById('journal-text').value;
-    if (!entry) return;
+    const entries = db.get('journal_entries');
+    entries.push({ text, date: new Date().toLocaleDateString() });
+    db.save('journal_entries', entries);
+    
+    document.getElementById('journal-input').value = "";
+    loadJournal();
+});
 
-    const history = document.getElementById('journal-history');
-    const time = new Date().toLocaleString();
-    
-    const note = document.createElement('div');
-    note.className = 'card';
-    note.style.textAlign = 'left';
-    note.style.padding = '15px';
-    note.innerHTML = `<small style="color:var(--text-dim)">${time}</small><p style="margin-top:10px">${entry}</p>`;
-    
-    history.prepend(note);
-    document.getElementById('journal-text').value = "";
-}
-
-// 5. AI Dictionary (Simple Simulation)
-function performTranslation() {
-    const term = document.getElementById('term-input').value.toLowerCase();
-    const output = document.getElementById('translation-output');
-    
+// --- TRANSLATOR LOGIC ---
+document.getElementById('trans-btn').addEventListener('click', () => {
+    const word = document.getElementById('trans-input').value.toLowerCase().trim();
     const dictionary = {
-        "ultrasound": "আল্ট্রাসাউন্ড (শব্দতরঙ্গ ব্যবহার করে গর্ভস্থ শিশুর ছবি দেখা)",
-        "trimester": "ত্রৈমাসিক (গর্ভাবস্থার ৩ মাসের একটি পর্যায়)",
-        "amniotic fluid": "অ্যামনিওটিক তরল (জরায়ুতে শিশুকে ঘিরে থাকা জলীয় অংশ)",
-        "labor": "প্রসব বেদনা"
+        "fetus": "ভ্রূণ (Fetus)",
+        "labor": "প্রসব বেদনা",
+        "trimester": "ত্রৈমাসিক"
     };
+    document.getElementById('trans-output').innerText = dictionary[word] || "Searching AI database...";
+});
 
-    output.innerText = dictionary[term] || "Term not found in clinical database. Connecting to AI...";
-    output.style.display = "block";
-}
+// --- RESET DATABASE ---
+document.getElementById('reset-db').addEventListener('click', () => {
+    if(confirm("Clear all saved data?")) db.clear();
+});
 
-// 6. Logout Logic
-function logout() {
-    if (confirm("Are you sure you want to exit MatriCare?")) {
-        window.location.reload();
-    }
-}
-
-// Initialize Date
-document.getElementById('current-date').innerText = new Date().toDateString();
+// Initialize app data
+loadJournal();
+if(db.get('user_week')[0]) document.getElementById('stat-week').innerText = "Week " + db.get('user_week')[0];
