@@ -3,102 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatriCare | Premium Maternal Dashboard</title>
+    <title>MatriCare | Enterprise Maternal Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="sidebar-brand">
-                <i class="fas fa-heartbeat"></i>
-                <span>MatriCare</span>
+    <div class="app-shell">
+        <aside class="app-sidebar">
+            <div class="sidebar-top">
+                <div class="logo-wrapper">
+                    <i class="fas fa-microchip"></i>
+                    <h1>MatriCare <span>PRO</span></h1>
+                </div>
+            </div>
+
+            <div class="sidebar-nav">
+                <nav class="nav-group">
+                    <span class="nav-title">Intelligence Overview</span>
+                    <ul class="nav-list">
+                        <li class="nav-item active" data-target="dashboard">
+                            <i class="fas fa-layer-group"></i> <span>Executive Dashboard</span>
+                        </li>
+                        <li class="nav-item" data-target="tracker">
+                            <i class="fas fa-dna"></i> <span>Biometric Tracker</span>
+                        </li>
+                    </ul>
+                </nav>
+
+                <nav class="nav-group">
+                    <span class="nav-title">Medical DBMS</span>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-target="journal">
+                            <i class="fas fa-file-medical"></i> <span>Health Journal</span>
+                        </li>
+                        <li class="nav-item" data-target="appointments">
+                            <i class="fas fa-calendar-check"></i> <span>Appt. Manager</span>
+                        </li>
+                        <li class="nav-item" data-target="medication">
+                            <i class="fas fa-pills"></i> <span>Meds Scheduler</span>
+                        </li>
+                    </ul>
+                </nav>
+
+                <nav class="nav-group">
+                    <span class="nav-title">Smart Resources</span>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-target="nutrition">
+                            <i class="fas fa-bowl-food"></i> <span>Nutrition AI</span>
+                        </li>
+                        <li class="nav-item" data-target="translator">
+                            <i class="fas fa-language"></i> <span>Medical Translator</span>
+                        </li>
+                        <li class="nav-item" data-target="myth">
+                            <i class="fas fa-lightbulb"></i> <span>Myth Buster</span>
+                        </li>
+                    </ul>
+                </nav>
+
+                <nav class="nav-group">
+                    <span class="nav-title">Safety & Global</span>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-target="emergency">
+                            <i class="fas fa-shield-virus"></i> <span>SOS Emergency</span>
+                        </li>
+                        <li class="nav-item" data-target="profile">
+                            <i class="fas fa-user-gear"></i> <span>Profile Sync</span>
+                        </li>
+                        <li class="nav-item danger" id="system-wipe">
+                            <i class="fas fa-trash-can"></i> <span>Wipe DBMS Data</span>
+                        </li>
+                    </ul>
+                </nav>
             </div>
             
-            <div class="sidebar-content">
-                <p class="menu-label">Main</p>
-                <ul class="nav-menu">
-                    <li class="nav-item active" data-page="dashboard"><i class="fas fa-th-large"></i> Dashboard</li>
-                    <li class="nav-item" data-page="tracker"><i class="fas fa-baby"></i> Pregnancy Tracker</li>
-                    <li class="nav-item" data-page="journal"><i class="fas fa-journal-whills"></i> Health Journal</li>
-                </ul>
-
-                <p class="menu-label">Resources</p>
-                <ul class="nav-menu">
-                    <li class="nav-item" data-page="nutrition"><i class="fas fa-apple-alt"></i> Nutrition Guide</li>
-                    <li class="nav-item" data-page="translator"><i class="fas fa-language"></i> AI Translator</li>
-                    <li class="nav-item" data-page="myth"><i class="fas fa-lightbulb"></i> Myth Buster</li>
-                </ul>
-
-                <p class="menu-label">Account</p>
-                <ul class="nav-menu">
-                    <li class="nav-item" data-page="profile"><i class="fas fa-user-circle"></i> Profile</li>
-                    <li id="reset-system" class="nav-item danger"><i class="fas fa-sync-alt"></i> Reset All Data</li>
-                </ul>
+            <div class="sidebar-footer">
+                <p>&copy; 2026 MatriCare AI System</p>
             </div>
         </aside>
 
-        <main class="main-wrapper">
-            <header class="top-bar">
-                <h2 id="header-title">Dashboard</h2>
-                <div class="user-info">
-                    <span>Welcome, Mother</span>
-                    <img src="https://ui-avatars.com/api/?name=Mom&background=ff4d6d&color=fff" alt="User">
+        <main class="app-main">
+            <header class="app-header">
+                <div class="header-breadcrumb">
+                    <span id="breadcrumb-root">Home</span> / <span id="breadcrumb-current">Dashboard</span>
+                </div>
+                <div class="header-actions">
+                    <div class="clock-display" id="live-clock">00:00:00 AM</div>
+                    <div class="action-icons">
+                        <div class="notif-bell"><i class="fas fa-bell"></i><span class="badge">3</span></div>
+                        <div class="user-meta">
+                            <span class="user-name">Rowsan Ara Bushra</span>
+                            <img src="https://ui-avatars.com/api/?name=Bushra&background=ff4d6d&color=fff" class="avatar">
+                        </div>
+                    </div>
                 </div>
             </header>
 
-            <div class="main-content">
-                <section id="dashboard" class="content-page active">
-                    <div class="stats-container">
-                        <div class="stat-card pink" onclick="handleKick()">
-                            <i class="fas fa-shoe-prints"></i>
-                            <div class="stat-text">
-                                <h3>Total Kicks</h3>
-                                <p id="db-kick-count">0</p>
+            <div class="view-container">
+
+                <section id="dashboard" class="page-view active">
+                    <div class="welcome-banner card">
+                        <div class="banner-info">
+                            <h2>Welcome Back, <span>Rowsan!</span></h2>
+                            <p>Your pregnancy journey is progressing perfectly. You are currently in the 2nd Trimester.</p>
+                            <div class="progress-section">
+                                <div class="progress-text">Journey Progress: <span id="progress-val">65%</span></div>
+                                <div class="progress-track"><div class="progress-bar" style="width: 65%;"></div></div>
                             </div>
                         </div>
-                        <div class="stat-card blue">
-                            <i class="fas fa-calendar-alt"></i>
-                            <div class="stat-text">
-                                <h3>Current Week</h3>
-                                <p id="db-week-display">--</p>
+                        <div class="banner-icon"><i class="fas fa-sparkles"></i></div>
+                    </div>
+
+                    <div class="quick-stats">
+                        <div class="stat-box card pulse" onclick="addKick()">
+                            <div class="stat-icon pink"><i class="fas fa-shoe-prints"></i></div>
+                            <div class="stat-data">
+                                <h3>Fetal Kicks</h3>
+                                <p id="db-kicks">0</p>
+                                <small>Click to Record</small>
                             </div>
+                        </div>
+                        <div class="stat-box card">
+                            <div class="stat-icon blue"><i class="fas fa-calendar-week"></i></div>
+                            <div class="stat-data">
+                                <h3>Gestational Age</h3>
+                                <p id="db-week">Week --</p>
+                                <small id="db-days">LMP Not Set</small>
+                            </div>
+                        </div>
+                        <div class="stat-box card">
+                            <div class="stat-icon green"><i class="fas fa-heart-circle-check"></i></div>
+                            <div class="stat-data">
+                                <h3>Health Pulse</h3>
+                                <p>Normal</p>
+                                <small>Stable Data</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card grid-item">
+                            <h3><i class="fas fa-bell"></i> Recent Notifications</h3>
+                            <ul class="list-minimal">
+                                <li>Take your Folic Acid supplement at 2:00 PM</li>
+                                <li>Blood pressure check-up tomorrow</li>
+                                <li>Drink 2 liters of water (Incomplete)</li>
+                            </ul>
+                        </div>
+                        <div class="card grid-item">
+                            <h3><i class="fas fa-quote-left"></i> Daily Health Insight</h3>
+                            <p id="health-tip">Loading daily clinical advice based on your current trimester...</p>
                         </div>
                     </div>
                 </section>
 
-                <section id="tracker" class="content-page">
-                    <div class="form-card">
-                        <h3>Analyze Your Progress</h3>
-                        <label>Last Menstrual Period (LMP):</label>
-                        <input type="date" id="lmp-input" class="st-input">
-                        <button class="st-btn" id="calc-trigger">Save & Calculate</button>
-                        <div id="tracker-result" class="status-msg"></div>
+                <section id="tracker" class="page-view">
+                    <div class="card-mega">
+                        <div class="card-header">
+                            <h3>Pregnancy Algorithm Input</h3>
+                        </div>
+                        <div class="form-body">
+                            <div class="input-row">
+                                <div class="input-field">
+                                    <label>Last Menstrual Period (LMP)</label>
+                                    <input type="date" id="lmp-input" class="modern-input">
+                                </div>
+                                <div class="input-field">
+                                    <label>Average Cycle Length (Days)</label>
+                                    <input type="number" value="28" class="modern-input">
+                                </div>
+                            </div>
+                            <button class="btn-full" id="calc-trigger">Synchronize Data & Calculate EDD</button>
+                        </div>
+                        <div id="tracker-output" class="result-area hidden">
+                            <div class="res-card"><span>Estimated Due Date:</span> <strong id="res-edd">--</strong></div>
+                            <div class="res-card"><span>Current Trimester:</span> <strong id="res-tri">--</strong></div>
+                            <div class="res-card"><span>Baby Size Status:</span> <strong>Lemon size</strong></div>
+                        </div>
                     </div>
                 </section>
 
-                <section id="journal" class="content-page">
-                    <div class="form-card">
-                        <h3>Health & Mood Diary</h3>
-                        <textarea id="journal-note" class="st-input" rows="4" placeholder="How are you feeling?"></textarea>
-                        <button class="st-btn" id="save-note-btn">Add to Database</button>
-                        <div id="journal-entries" class="entry-list"></div>
+                <section id="journal" class="page-view">
+                    <div class="journal-split">
+                        <div class="journal-editor card">
+                            <h3>Add Journal Entry</h3>
+                            <div class="editor-input">
+                                <textarea id="j-text" placeholder="Describe symptoms, moods, or cravings..." rows="6" class="modern-input"></textarea>
+                                <div class="mood-selector">
+                                    <button class="mood-btn">😊 Happy</button>
+                                    <button class="mood-btn">😴 Tired</button>
+                                    <button class="mood-btn">🤢 Nauseous</button>
+                                </div>
+                                <button class="btn-full mt-10" id="save-journal-btn">Save to DBMS Logs</button>
+                            </div>
+                        </div>
+                        <div class="journal-logs card">
+                            <h3>Historical Database Entries</h3>
+                            <div id="journal-db-list" class="db-list">
+                                </div>
+                        </div>
                     </div>
                 </section>
 
-                <section id="translator" class="content-page">
-                    <div class="form-card">
-                        <h3>Medical AI Dictionary</h3>
-                        <input type="text" id="trans-input" class="st-input" placeholder="Enter term (e.g., Labor)">
-                        <button class="st-btn" id="trans-trigger">Translate to Bengali</button>
-                        <p id="trans-output" class="status-msg"></p>
+                <section id="appointments" class="page-view">
+                    <div class="card">
+                        <h3>Schedule Medical Visit</h3>
+                        <div class="input-row">
+                            <input type="text" id="appt-doc" placeholder="Doctor's Name/Specialty" class="modern-input">
+                            <input type="datetime-local" id="appt-date" class="modern-input">
+                        </div>
+                        <button class="btn-full" id="add-appt-btn">Register Appointment</button>
+                    </div>
+                    <div class="card mt-20">
+                        <h3>Upcoming Visits</h3>
+                        <div id="appt-db-list" class="db-list"></div>
                     </div>
                 </section>
 
-                <section id="nutrition" class="content-page"><div class="form-card"><h3>Nutrition Plan</h3><p>Ensure high protein and calcium intake.</p></div></section>
-                <section id="myth" class="content-page"><div class="form-card"><h3>Myth Buster</h3><p>Myth: Spicy food induces labor. Fact: No scientific proof.</p></div></section>
-                <section id="profile" class="content-page"><div class="form-card"><h3>My Profile</h3><p>Manage your health records here.</p></div></section>
+                <section id="medication" class="page-view">
+                    <div class="card">
+                        <h3>Medicine & Supplement Tracker</h3>
+                        <div class="input-row">
+                            <input type="text" id="med-name" placeholder="Medication Name (e.g. Iron)" class="modern-input">
+                            <select id="med-freq" class="modern-input">
+                                <option>Once Daily</option>
+                                <option>Twice Daily</option>
+                                <option>As Needed</option>
+                            </select>
+                        </div>
+                        <button class="btn-full" onclick="alert('Medication Logged')">Save Schedule</button>
+                    </div>
+                </section>
+
+                <section id="nutrition" class="page-view">
+                    <div class="card">
+                        <h3>Trimester Based Nutrition Guide</h3>
+                        <div class="nutrition-grid">
+                            <div class="nutri-item"><h4>Folic Acid</h4><p>Green leafy vegetables, beans, citrus fruits.</p></div>
+                            <div class="nutri-item"><h4>Iron</h4><p>Spinach, Lean meat, poultry, fish.</p></div>
+                            <div class="nutri-item"><h4>Calcium</h4><p>Milk, yogurt, cheese, fortified cereals.</p></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="translator" class="page-view">
+                    <div class="card-mega">
+                        <h3>Smart AI Medical Translator</h3>
+                        <p>Instant translation for complex medical terms into simple Bengali.</p>
+                        <div class="search-bar">
+                            <input type="text" id="t-query" placeholder="e.g. Amniotic Fluid, Preeclampsia" class="modern-input">
+                            <button id="t-btn" class="btn-full mt-10">Translate & Define</button>
+                        </div>
+                        <div id="t-output" class="result-area mt-20"></div>
+                    </div>
+                </section>
+
+                <section id="myth" class="page-view">
+                    <div class="card">
+                        <h3>Common Folklore vs. Clinical Truth</h3>
+                        <div class="myth-list">
+                            <div class="myth-box"><strong>Myth:</strong> Full moon induces labor. <br> <span>Fact: Statistics show no correlation with lunar phases.</span></div>
+                            <div class="myth-box"><strong>Myth:</strong> Heartburn means hairy baby. <br> <span>Fact: Heartburn is caused by hormones and organ pressure.</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="emergency" class="page-view">
+                    <div class="card danger-card">
+                        <h3><i class="fas fa-triangle-exclamation"></i> Emergency Response</h3>
+                        <p>One tap to call emergency services or notify your primary contact.</p>
+                        <div class="sos-buttons">
+                            <button class="btn-danger-large"><i class="fas fa-phone"></i> Call Doctor</button>
+                            <button class="btn-danger-large"><i class="fas fa-ambulance"></i> Call Ambulance</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="profile" class="page-view">
+                    <div class="card">
+                        <h3>Profile & Cloud Synchronization</h3>
+                        <div class="profile-preview">
+                            <div class="p-row"><span>Username:</span> <strong>Bushra</strong></div>
+                            <div class="p-row"><span>Blood Group:</span> <strong>O+</strong></div>
+                            <div class="p-row"><span>DBMS Mode:</span> <strong>LocalStorage (Active)</strong></div>
+                        </div>
+                        <button class="btn-full mt-20">Cloud Backup Sync</button>
+                    </div>
+                </section>
 
             </div>
         </main>
