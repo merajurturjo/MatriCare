@@ -3,117 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatriCare Premium</title>
+    <title>MatriCare PRO | Home</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <div class="app-shell">
-        <nav class="floating-nav">
-            <div class="nav-logo"><div class="logo-box"><i class="fas fa-heart"></i></div></div>
-            <div class="nav-links">
-                <div class="nav-item active" data-target="home" title="Home"><i class="fas fa-house"></i></div>
-                <div class="nav-item" data-target="meds" title="Medications"><i class="fas fa-pills"></i></div>
-                <div class="nav-item" data-target="diet" title="Diet & Food"><i class="fas fa-apple-whole"></i></div>
-                <div class="nav-item" data-target="blood" title="Blood Donors"><i class="fas fa-drop"></i></div>
-                <div class="nav-item" data-target="profile" title="My Profile"><i class="fas fa-user-circle"></i></div>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-hand-holding-heart"></i>
+                <span>MatriCare</span>
             </div>
-            <div class="nav-footer">
-                <div class="nav-item sos" data-target="sos"><i class="fas fa-phone-flip"></i></div>
-            </div>
-        </nav>
+            <nav class="nav-menu">
+                <div class="nav-item active" data-target="home"><i class="fas fa-th-large"></i> Dashboard</div>
+                <div class="nav-item" data-target="meds"><i class="fas fa-pills"></i> Medications</div>
+                <div class="nav-item" data-target="diet"><i class="fas fa-utensils"></i> Diet & Food</div>
+                <div class="nav-item" data-target="blood"><i class="fas fa-droplet"></i> Blood Donors</div>
+                <div class="nav-item" data-target="profile"><i class="fas fa-user-circle"></i> My Profile</div>
+                <div class="nav-item sos" data-target="sos"><i class="fas fa-phone-alt"></i> Emergency</div>
+            </nav>
+        </aside>
 
-        <main class="main-stage">
-            <header class="glass-header">
-                <h1 id="view-title">Home</h1>
-                <div class="user-pill">
-                    <span id="user-display-name">Rowsan Ara Bushra</span>
-                    <img src="https://ui-avatars.com/api/?name=Bushra&background=ff4d6d&color=fff" class="user-img">
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="header-text">
+                    <h2 id="page-title">Dashboard</h2>
+                    <p>Welcome back, <span id="user-header-name">Bushra</span></p>
+                </div>
+                <div class="user-info">
+                    <img src="https://ui-avatars.com/api/?name=Rowsan+Ara+Bushra&background=ff758c&color=fff" alt="User">
                 </div>
             </header>
 
-            <div class="stage-content">
-                
+            <div class="content-body">
                 <section id="home" class="page active">
-                    <div class="welcome-card">
-                        <h2>Welcome Back!</h2>
-                        <p>Keep tracking your health daily for a safe journey.</p>
+                    <div class="hero-banner">
+                        <h1>Health First, Always. ✨</h1>
+                        <p>Track your pregnancy journey with precision and care.</p>
                     </div>
                 </section>
 
                 <section id="meds" class="page">
-                    <div class="glass-card">
-                        <h3><i class="fas fa-pills"></i> Medicine Reminder</h3>
-                        <div class="input-row">
+                    <div class="card">
+                        <h3><i class="fas fa-clock"></i> Medicine Reminder</h3>
+                        <div class="form-group">
                             <input type="text" id="med-name" placeholder="Medicine Name">
                             <input type="time" id="med-time">
-                            <button class="btn-add" onclick="addMed()">Add</button>
+                            <button class="btn-primary" onclick="addMed()">Add Med</button>
                         </div>
-                        <div id="med-list" class="list-container"></div>
+                        <div id="med-list" class="list-display"></div>
                     </div>
                 </section>
 
                 <section id="diet" class="page">
-                    <div class="glass-card">
-                        <h3><i class="fas fa-utensils"></i> Daily Diet Plan</h3>
-                        <div class="input-row">
+                    <div class="card">
+                        <h3><i class="fas fa-apple-whole"></i> Meal Logger</h3>
+                        <div class="form-group">
                             <select id="meal-type">
-                                <option value="Breakfast">Breakfast</option>
-                                <option value="Lunch">Lunch</option>
-                                <option value="Dinner">Dinner</option>
-                                <option value="Snack">Snack</option>
+                                <option>Breakfast</option>
+                                <option>Lunch</option>
+                                <option>Dinner</option>
                             </select>
-                            <input type="text" id="food-item" placeholder="What did you eat?">
-                            <button class="btn-add" onclick="addDiet()">Record</button>
+                            <input type="text" id="food-val" placeholder="What's on the menu?">
+                            <button class="btn-primary" onclick="addDiet()">Record</button>
                         </div>
-                        <div id="diet-list" class="list-container"></div>
+                        <div id="diet-list" class="list-display"></div>
                     </div>
                 </section>
 
                 <section id="blood" class="page">
-                    <div class="glass-card">
-                        <h3><i class="fas fa-drop"></i> Blood Donor Contacts</h3>
-                        <div class="input-row">
-                            <input type="text" id="donor-name" placeholder="Name">
-                            <select id="blood-group">
-                                <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
-                                <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
-                            </select>
-                            <input type="text" id="donor-phone" placeholder="Phone">
-                            <button class="btn-add" onclick="addDonor()">Save</button>
+                    <div class="card">
+                        <h3><i class="fas fa-heart"></i> Donor Directory</h3>
+                        <div class="form-group">
+                            <input type="text" id="d-name" placeholder="Donor Name">
+                            <input type="text" id="d-group" placeholder="Blood Group">
+                            <input type="text" id="d-phone" placeholder="Contact Number">
+                            <button class="btn-primary" onclick="addDonor()">Save Donor</button>
                         </div>
-                        <div id="donor-list" class="list-container"></div>
+                        <div id="donor-list" class="list-display"></div>
                     </div>
                 </section>
 
                 <section id="profile" class="page">
-                    <div class="glass-card profile-box">
-                        <h3>My Profile</h3>
-                        <div class="profile-detail">
-                            <label>Full Name</label>
+                    <div class="card profile-card">
+                        <h3>My Information</h3>
+                        <div class="profile-form">
+                            <label>Name</label>
                             <input type="text" id="p-name" value="Rowsan Ara Bushra">
                             <label>Blood Group</label>
-                            <input type="text" id="p-blood" placeholder="e.g. B+">
-                            <label>Emergency Contact</label>
-                            <input type="text" id="p-emergency" placeholder="Phone number">
-                            <button class="btn-shine" onclick="saveProfile()">Update Profile</button>
+                            <input type="text" id="p-blood" placeholder="Enter your blood group">
+                            <button class="btn-primary full" onclick="saveProfile()">Save Profile</button>
                         </div>
                     </div>
                 </section>
 
                 <section id="sos" class="page">
                     <div class="sos-card">
-                        <i class="fas fa-triangle-exclamation"></i>
-                        <h2>Emergency SOS</h2>
-                        <button class="sos-btn" onclick="window.location.href='tel:999'">Call Ambulance</button>
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h2>Emergency Response</h2>
+                        <a href="tel:999" class="sos-btn">Call Ambulance</a>
                     </div>
                 </section>
-
             </div>
         </main>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
