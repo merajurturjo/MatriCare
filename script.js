@@ -1,80 +1,94 @@
-// ১. পেজ নেভিগেশন
-function showPage(pageId) {
-    document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+// Switching Sections
+function switchSection(id) {
+    document.querySelectorAll('.page-section').forEach(s => s.classList.add('hidden'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     
-    document.getElementById(pageId).classList.remove('hidden');
+    document.getElementById(id).classList.remove('hidden');
     event.currentTarget.classList.add('active');
+    document.getElementById('section-title').innerText = id.charAt(0).toUpperCase() + id.slice(1);
 }
 
-// ২. কিক কাউন্টার
+// Fetal Kicks Counter
 let kicks = 0;
 function addKick() {
     kicks++;
     document.getElementById('kick-count').innerText = kicks;
 }
 
-// ৩. ডেটা সেভ (localStorage)
+// Data Handling (localStorage)
 function saveData(type) {
-    let records = JSON.parse(localStorage.getItem(type) || '[]');
-    
+    let data = JSON.parse(localStorage.getItem(type) || '[]');
+    let record = { id: Date.now() };
+
     if (type === 'meds') {
-        const name = document.getElementById('m-name').value;
-        const time = document.getElementById('m-time').value;
-        if (!name || !time) return alert("Please fill both fields");
-        records.push({ name, time, id: Date.now() });
-        document.getElementById('m-name').value = '';
+        record.name = document.getElementById('med-name').value;
+        record.time = document.getElementById('med-time').value;
+        if (!record.name || !record.time) return;
+    } else if (type === 'diet') {
+        record.type = document.getElementById('meal-type').value;
+        record.item = document.getElementById('food-item').value;
+        if (!record.item) return;
     } else if (type === 'donors') {
-        const dName = document.getElementById('d-name').value;
-        const dGroup = document.getElementById('d-group').value;
-        if (!dName || !dGroup) return alert("Please fill both fields");
-        records.push({ name: dName, group: dGroup, id: Date.now() });
-        document.getElementById('d-name').value = '';
-        document.getElementById('d-group').value = '';
+        record.name = document.getElementById('donor-name').value;
+        record.group = document.getElementById('donor-group').value;
+        record.phone = document.getElementById('donor-phone').value;
+        if (!record.name || !record.phone) return;
     }
 
-    localStorage.setItem(type, JSON.stringify(records));
-    renderAll();
+    data.push(record);
+    localStorage.setItem(type, JSON.stringify(data));
+    renderLists();
+    
+    // Clear Inputs
+    document.querySelectorAll('input').forEach(i => i.value = '');
 }
 
-// ৪. ডিলিট লজিক
-function deleteItem(type, id) {
-    let records = JSON.parse(localStorage.getItem(type));
-    records = records.filter(r => r.id !== id);
-    localStorage.setItem(type, JSON.stringify(records));
-    renderAll();
+function renderLists() {
+    const types = ['meds', 'diet', 'donors'];
+    types.forEach(type => {
+        const container = document.getElementById(`${type}-list`);
+        const data = JSON.parse(localStorage.getItem(type) || '[]');
+        if (container) {
+            container.innerHTML = data.map(item => `
+                <div class="record-row">
+                    <span>${item.name || item.item} ${item.time ? 'at '+item.time : ''} ${item.group ? '('+item.group+')' : ''}</span>
+                    <button onclick="deleteRecord('${type}', ${item.id})" style="border:none; color:red; cursor:pointer;">✕</button>
+                </div>
+            `).join('');
+        }
+    });
 }
 
-// ৫. ডেটা রেন্ডার করা
-function renderAll() {
-    // Meds Render
-    const meds = JSON.parse(localStorage.getItem('meds') || '[]');
-    const medList = document.getElementById('med-list');
-    if(medList) {
-        medList.innerHTML = meds.map(m => `
-            <div class="item">
-                <span><strong>${m.name}</strong> - ${m.time}</span>
-                <button onclick="deleteItem('meds', ${m.id})" style="color:red; border:none; background:none; cursor:pointer;">Delete</button>
-            </div>
-        `).join('');
-    }
+function deleteRecord(type, id) {
+    let data = JSON.parse(localStorage.getItem(type));
+    data = data.filter(i => i.id !== id);
+    localStorage.setItem(type, JSON.stringify(data));
+    renderLists();
+}
 
-    // Donors Render
-    const donors = JSON.parse(localStorage.getItem('donors') || '[]');
-    const donorList = document.getElementById('donor-list');
-    if(donorList) {
-        donorList.innerHTML = donors.map(d => `
-            <div class="item">
-                <span><strong>${d.name}</strong> (${d.group})</span>
-                <button onclick="deleteItem('donors', ${d.id})" style="color:red; border:none; background:none; cursor:pointer;">Remove</button>
-            </div>
-        `).join('');
+// Simple Dictionary Search Logic
+const medicalDictionary = {
+    "anemia": "A condition in which the blood doesn't have enough healthy red blood cells.",
+    "placenta": "An organ that develops in the uterus during pregnancy to provide oxygen and nutrients to the baby.",
+    "glucose": "A simple sugar that is an important energy source in living organisms.",
+    "trimester": "One of the three periods of three months into which a pregnancy is divided."
+};
+
+function searchDictionary() {
+    const query = document.getElementById('dict-search').value.toLowerCase();
+    const output = document.getElementById('dict-output');
+    const resultKey = Object.keys(medicalDictionary).find(k => k.includes(query));
+    
+    if (query && resultKey) {
+        output.innerHTML = `<strong>${resultKey.toUpperCase()}:</strong> ${medicalDictionary[resultKey]}`;
+    } else {
+        output.innerText = "Type a term to see the explanation.";
     }
 }
 
 function triggerSOS() {
-    alert("Emergency SOS Activated! Notifying healthcare contacts...");
+    alert("Emergency SOS Activated! Calling Hospital and Primary Contact...");
 }
 
-// অ্যাপ ওপেন হওয়ার সময় ডেটা লোড করা
-window.onload = renderAll;
+// Initial Load
+window.onload = renderLists;
