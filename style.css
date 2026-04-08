@@ -84,14 +84,23 @@ body {
 .ring-bg { fill: none; stroke: #eee; stroke-width: 8; }
 .ring-bar { 
     fill: none; stroke: var(--primary); stroke-width: 8; 
-    stroke-dasharray: 251; stroke-dashoffset: 100; /* Adjusted via JS logic later */
+    stroke-dasharray: 251; stroke-dashoffset: 251; /* Total circumference is 2*pi*r = 2*pi*40 = 251 */
+    transition: stroke-dashoffset 1s ease-out;
 }
 .progress-val { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: bold; }
 
+/* Calculator Card (NEW) */
+.calc-card { display: flex; flex-direction: column; gap: 10px; }
+.results-box { background: rgba(255, 255, 255, 0.4); padding: 15px; border-radius: 15px; margin-top: 10px; border: 1px solid #eee; }
+.results-box p { margin-bottom: 5px; font-size: 0.9rem; }
+
 /* Global UI Elements */
 .action-btn { background: var(--primary); border: none; padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: 600; }
-.form-row { display: flex; gap: 10px; margin-top: 15px; }
-input, select { padding: 12px; border-radius: 12px; border: 1px solid #ddd; outline: none; flex: 1; }
+.action-btn.full-width { width: 100%; }
+.form-row { display: flex; gap: 10px; margin-top: 15px; align-items: center; }
+.form-row.vertical { flex-direction: column; align-items: flex-start; }
+input, select { padding: 12px; border-radius: 12px; border: 1px solid #ddd; outline: none; flex: 1; width: 100%; }
+label { font-size: 0.9rem; color: #666; }
 
 .record-container { margin-top: 20px; }
 .record-row { 
