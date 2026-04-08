@@ -32,17 +32,31 @@
 
         <section id="dashboard" class="page-section">
             <div class="bento-grid">
+                
                 <div class="card hero-card">
                     <div class="hero-text">
                         <h3>Pregnancy Progress</h3>
-                        <p id="week-display">Week 24 • Day 3</p>
+                        <p id="week-display">Set your LMP to see progress</p>
                     </div>
                     <div class="progress-container">
                         <svg class="progress-ring" width="100" height="100">
                             <circle class="ring-bg" cx="50" cy="50" r="40"></circle>
-                            <circle class="ring-bar" cx="50" cy="50" r="40"></circle>
+                            <circle class="ring-bar" id="progress-bar" cx="50" cy="50" r="40"></circle>
                         </svg>
-                        <span class="progress-val">60%</span>
+                        <span class="progress-val" id="progress-text">0%</span>
+                    </div>
+                </div>
+
+                <div class="card calc-card">
+                    <h3>Due Date Calculator</h3>
+                    <div class="form-row vertical">
+                        <label for="lmp-date">Enter your Last Period (LMP):</label>
+                        <input type="date" id="lmp-date">
+                        <button class="action-btn full-width" onclick="calculatePregnancy()">Calculate</button>
+                    </div>
+                    <div id="calc-results" class="results-box hidden">
+                        <p><strong>Estimated Due Date (EDD):</strong> <span id="edd-result">--</span></p>
+                        <p><strong>Current Week:</strong> <span id="current-week-result">--</span></p>
                     </div>
                 </div>
                 
@@ -54,7 +68,7 @@
 
                 <div class="card tip-card">
                     <h3>Daily Health Tip</h3>
-                    <p id="daily-tip">"Stay hydrated! Aim for 8-10 glasses of water to support your baby's growth."</p>
+                    <p id="daily-tip">"Set your LMP in the calculator to get personalized weekly progress."</p>
                 </div>
             </div>
         </section>
@@ -114,7 +128,7 @@
                 <h3>My Profile</h3>
                 <div class="profile-info">
                     <p><strong>Blood Group:</strong> O+ (Positive)</p>
-                    <p><strong>Due Date:</strong> August 15, 2026</p>
+                    <p><strong>Due Date:</strong> <span id="profile-edd">Not Calculated</span></p>
                     <p><strong>Emergency Contact:</strong> Primary Family Member</p>
                 </div>
             </div>
