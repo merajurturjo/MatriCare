@@ -15,7 +15,65 @@ function addKick() {
     document.getElementById('kick-count').innerText = kicks;
 }
 
-// Data Handling (localStorage)
+// Pregnancy Calculator Logic (NEW)
+function calculatePregnancy() {
+    const lmpInput = document.getElementById('lmp-date').value;
+    if (!lmpInput) return alert("Please select your Last Period (LMP) date.");
+
+    const lmpDate = new Date(lmpInput);
+    const today = new Date();
+
+    // 1. Calculate Estimated Due Date (EDD) - 280 days from LMP
+    const edd = new Date(lmpDate);
+    edd.setDate(edd.getDate() + 280);
+
+    // 2. Calculate Current Week & Day
+    const timeDiff = today.getTime() - lmpDate.getTime();
+    const daysPregnant = Math.floor(timeDiff / (1000 * 3600 * 24));
+    const weeksPregnant = Math.floor(daysPregnant / 7);
+    const daysIntoWeek = daysPregnant % 7;
+
+    // 3. Update UI (Calculator Card)
+    document.getElementById('calc-results').classList.remove('hidden');
+    document.getElementById('edd-result').innerText = edd.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    document.getElementById('current-week-result').innerText = `Week ${weeksPregnant}, Day ${daysIntoWeek}`;
+
+    // 4. Update UI (Dashboard Hero Card & Progress Bar)
+    document.getElementById('week-display').innerText = `Week ${weeksPregnant} • Day ${daysIntoWeek}`;
+    
+    // Total pregnancy duration is ~40 weeks (280 days). Calculate percentage.
+    let percentage = Math.min(Math.floor((daysPregnant / 280) * 100), 100);
+    percentage = Math.max(percentage, 0); // Ensure not negative if date is future
+    
+    document.getElementById('progress-text').innerText = `${percentage}%`;
+    
+    // Update SVG Progress Ring
+    const circle = document.getElementById('progress-bar');
+    const radius = circle.r.baseVal.value;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (percentage / 100) * circumference;
+    circle.style.strokeDashoffset = offset;
+
+    // 5. Update Profile Section
+    const profileEdd = document.getElementById('profile-edd');
+    if (profileEdd) {
+        profileEdd.innerText = edd.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    // Optional: Save LMP to localStorage to persist progress
+    localStorage.setItem('matriCare_lmp', lmpInput);
+}
+
+// Load LMP from localStorage if exists
+function loadProgress() {
+    const savedLmp = localStorage.getItem('matriCare_lmp');
+    if (savedLmp) {
+        document.getElementById('lmp-date').value = savedLmp;
+        calculatePregnancy(); // Automatically calculate on load
+    }
+}
+
+// Data Handling (localStorage) - Existing Logic
 function saveData(type) {
     let data = JSON.parse(localStorage.getItem(type) || '[]');
     let record = { id: Date.now() };
@@ -66,7 +124,7 @@ function deleteRecord(type, id) {
     renderLists();
 }
 
-// Simple Dictionary Search Logic
+// Simple Dictionary Search Logic - Existing Logic
 const medicalDictionary = {
     "anemia": "A condition in which the blood doesn't have enough healthy red blood cells.",
     "placenta": "An organ that develops in the uterus during pregnancy to provide oxygen and nutrients to the baby.",
@@ -91,4 +149,7 @@ function triggerSOS() {
 }
 
 // Initial Load
-window.onload = renderLists;
+window.onload = () => {
+    renderLists();
+    loadProgress(); // Load saved progress on startup
+};
